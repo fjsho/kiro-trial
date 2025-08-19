@@ -1,4 +1,10 @@
-import { generateTaskId } from '../utils/idGenerator.js';
+import { generateTaskId } from "../utils/idGenerator.js";
+
+// Constants for validation
+const VALIDATION_RULES = {
+  MIN_TASK_LENGTH: 1,
+  MAX_TASK_LENGTH: 500,
+} as const;
 
 export class UIController {
   private taskList!: HTMLElement;
@@ -11,9 +17,11 @@ export class UIController {
   }
 
   private initializeElements(): void {
-    this.taskList = this.getRequiredElement('task-list');
-    this.taskForm = this.getRequiredElement('add-task-form') as HTMLFormElement;
-    this.taskInput = this.getRequiredElement('new-task-input') as HTMLInputElement;
+    this.taskList = this.getRequiredElement("task-list");
+    this.taskForm = this.getRequiredElement("add-task-form") as HTMLFormElement;
+    this.taskInput = this.getRequiredElement(
+      "new-task-input"
+    ) as HTMLInputElement;
   }
 
   private getRequiredElement(id: string): HTMLElement {
@@ -25,8 +33,8 @@ export class UIController {
   }
 
   private bindEvents(): void {
-    this.taskForm.addEventListener('submit', this.handleAddTask.bind(this));
-    this.taskInput.addEventListener('keydown', this.handleKeyDown.bind(this));
+    this.taskForm.addEventListener("submit", this.handleAddTask.bind(this));
+    this.taskInput.addEventListener("keydown", this.handleKeyDown.bind(this));
   }
 
   private handleAddTask(event: Event): void {
@@ -35,27 +43,38 @@ export class UIController {
   }
 
   private handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' && !event.isComposing) {
+    if (event.key === "Enter" && !event.isComposing) {
       event.preventDefault();
       this.processTaskAddition();
     }
   }
 
   private processTaskAddition(): void {
-    const text = this.taskInput.value.trim();
-    
-    if (this.isValidTaskText(text)) {
-      this.addTaskToDOM(text);
+    const validatedText = this.getValidatedTaskText();
+
+    if (validatedText !== null) {
+      this.addTaskToDOM(validatedText);
       this.clearInput();
     }
+    // If validation fails, input field is not cleared to allow user to fix the input
+  }
+
+  private getValidatedTaskText(): string | null {
+    const text = this.taskInput.value.trim();
+    return this.isValidTaskText(text) ? text : null;
   }
 
   private isValidTaskText(text: string): boolean {
-    return text.length > 0;
+    // Validate that the text is not empty after trimming whitespace
+    // This prevents adding tasks with only spaces, tabs, or newlines
+    return (
+      text.length >= VALIDATION_RULES.MIN_TASK_LENGTH &&
+      text.length <= VALIDATION_RULES.MAX_TASK_LENGTH
+    );
   }
 
   private clearInput(): void {
-    this.taskInput.value = '';
+    this.taskInput.value = "";
   }
 
   private addTaskToDOM(text: string): void {
@@ -69,10 +88,10 @@ export class UIController {
   }
 
   private createTaskElement(taskId: string, text: string): HTMLLIElement {
-    const taskItem = document.createElement('li');
-    taskItem.className = 'task-item';
-    taskItem.setAttribute('data-task-id', taskId);
-    taskItem.setAttribute('role', 'listitem');
+    const taskItem = document.createElement("li");
+    taskItem.className = "task-item";
+    taskItem.setAttribute("data-task-id", taskId);
+    taskItem.setAttribute("role", "listitem");
 
     taskItem.innerHTML = this.getTaskHTML(taskId, text);
     return taskItem;
@@ -81,7 +100,7 @@ export class UIController {
   private getTaskHTML(taskId: string, text: string): string {
     // Escape HTML to prevent XSS
     const escapedText = this.escapeHtml(text);
-    
+
     return `
       <div class="task-content">
         <input 
@@ -106,7 +125,7 @@ export class UIController {
   }
 
   private escapeHtml(text: string): string {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }

@@ -151,4 +151,84 @@ describe("Task Addition E2E", () => {
     // Verify input field is cleared after adding task
     expect(taskInput.value).toBe("");
   });
+
+  it("should NOT add a task when empty string is submitted", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const taskList = document.getElementById("task-list")!;
+
+    // Act - Try to submit empty string
+    fireEvent.change(taskInput, { target: { value: "" } });
+    fireEvent.submit(form);
+
+    // Assert
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(0); // No task should be added
+
+    // Verify input field remains empty
+    expect(taskInput.value).toBe("");
+  });
+
+  it("should NOT add a task when only whitespace is submitted", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const taskList = document.getElementById("task-list")!;
+
+    const whitespaceText = "   \t  ";
+
+    // Act - Try to submit only whitespace
+    fireEvent.change(taskInput, { target: { value: whitespaceText } });
+    fireEvent.submit(form);
+
+    // Assert
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(0); // No task should be added
+
+    // Verify input field retains original value (not cleared since validation failed)
+    expect(taskInput.value).toBe(whitespaceText);
+  });
+
+  it("should NOT add a task when empty string is submitted via Enter key", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const taskList = document.getElementById("task-list")!;
+
+    // Act - Try to submit empty string via Enter key
+    fireEvent.change(taskInput, { target: { value: "" } });
+    fireEvent.keyDown(taskInput, {
+      key: "Enter",
+      code: "Enter",
+      isComposing: false,
+    });
+
+    // Assert
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(0); // No task should be added
+
+    // Verify input field remains empty
+    expect(taskInput.value).toBe("");
+  });
+
+  it("should NOT add a task when text exceeds maximum length", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const taskList = document.getElementById("task-list")!;
+
+    // Create a string longer than 500 characters
+    const longText = "a".repeat(501);
+
+    // Act - Try to submit text that exceeds maximum length
+    fireEvent.change(taskInput, { target: { value: longText } });
+    fireEvent.submit(form);
+
+    // Assert
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(0); // No task should be added
+
+    // Verify input field retains the long text
+    expect(taskInput.value).toBe(longText);
+  });
 });
