@@ -36,7 +36,7 @@
   - デフォルト値（completed: false, createdAt: new Date()）のテスト
   - _Requirements: 1.1_
 
-- [ ] 5. idGenerator ユーティリティ単体テスト実装
+- [x] 5. idGenerator ユーティリティ単体テスト実装
 
   - generateUniqueId() の一意性テスト
   - generateTaskId() のフォーマットテスト
