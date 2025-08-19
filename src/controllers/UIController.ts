@@ -26,10 +26,22 @@ export class UIController {
 
   private bindEvents(): void {
     this.taskForm.addEventListener('submit', this.handleAddTask.bind(this));
+    this.taskInput.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
   private handleAddTask(event: Event): void {
     event.preventDefault();
+    this.processTaskAddition();
+  }
+
+  private handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.isComposing) {
+      event.preventDefault();
+      this.processTaskAddition();
+    }
+  }
+
+  private processTaskAddition(): void {
     const text = this.taskInput.value.trim();
     
     if (this.isValidTaskText(text)) {
