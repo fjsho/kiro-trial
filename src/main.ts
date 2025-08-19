@@ -1,4 +1,7 @@
 import './style.css'
+import { UIController } from './controllers/UIController.js'
 
-// TODO: This will be implemented in later tasks
-console.log('Simple TODO App - Ready for implementation')
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+  new UIController();
+});
