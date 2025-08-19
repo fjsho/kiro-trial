@@ -4,6 +4,9 @@ import { UIController } from "../controllers/UIController.js";
 
 describe("Task Addition E2E", () => {
   beforeEach(() => {
+    // Clear localStorage before each test
+    localStorage.clear();
+
     // Set up DOM with the HTML structure
     document.body.innerHTML = `
       <div id="app">
@@ -48,6 +51,9 @@ describe("Task Addition E2E", () => {
     fireEvent.change(taskInput, { target: { value: taskText } });
     fireEvent.submit(form);
 
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
     expect(taskItems).toHaveLength(1);
@@ -77,6 +83,9 @@ describe("Task Addition E2E", () => {
     // Act
     fireEvent.change(taskInput, { target: { value: taskText } });
     fireEvent.keyDown(taskInput, { key: "Enter", code: "Enter" });
+
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
@@ -116,6 +125,9 @@ describe("Task Addition E2E", () => {
       isComposing: true,
     });
 
+    // Wait for any potential async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
     expect(taskItems).toHaveLength(0); // No task should be added
@@ -140,6 +152,9 @@ describe("Task Addition E2E", () => {
       isComposing: false,
     });
 
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
     expect(taskItems).toHaveLength(1);
@@ -162,6 +177,9 @@ describe("Task Addition E2E", () => {
     fireEvent.change(taskInput, { target: { value: "" } });
     fireEvent.submit(form);
 
+    // Wait for any potential async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
     expect(taskItems).toHaveLength(0); // No task should be added
@@ -181,6 +199,9 @@ describe("Task Addition E2E", () => {
     // Act - Try to submit only whitespace
     fireEvent.change(taskInput, { target: { value: whitespaceText } });
     fireEvent.submit(form);
+
+    // Wait for any potential async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
@@ -203,6 +224,9 @@ describe("Task Addition E2E", () => {
       isComposing: false,
     });
 
+    // Wait for any potential async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
     expect(taskItems).toHaveLength(0); // No task should be added
@@ -224,11 +248,140 @@ describe("Task Addition E2E", () => {
     fireEvent.change(taskInput, { target: { value: longText } });
     fireEvent.submit(form);
 
+    // Wait for any potential async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     // Assert
     const taskItems = taskList.querySelectorAll(".task-item");
     expect(taskItems).toHaveLength(0); // No task should be added
 
     // Verify input field retains the long text
     expect(taskInput.value).toBe(longText);
+  });
+
+  it("should persist added tasks to LocalStorage and display them in the list", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const taskList = document.getElementById("task-list")!;
+
+    const taskText1 = "永続化テストタスク1";
+    const taskText2 = "永続化テストタスク2";
+
+    // Act - Add first task
+    fireEvent.change(taskInput, { target: { value: taskText1 } });
+    fireEvent.submit(form);
+
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Add second task
+    fireEvent.change(taskInput, { target: { value: taskText2 } });
+    fireEvent.submit(form);
+
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Assert - Tasks should be displayed in the list
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(2);
+
+    const firstTaskText = taskItems[0].querySelector(".task-text");
+    const secondTaskText = taskItems[1].querySelector(".task-text");
+    expect(firstTaskText).toHaveTextContent(taskText1);
+    expect(secondTaskText).toHaveTextContent(taskText2);
+
+    // Assert - Tasks should be persisted in LocalStorage
+    const storedTasks = localStorage.getItem("todoApp_tasks");
+    expect(storedTasks).toBeTruthy();
+
+    const parsedTasks = JSON.parse(storedTasks!);
+    expect(parsedTasks).toHaveLength(2);
+    expect(parsedTasks[0].text).toBe(taskText1);
+    expect(parsedTasks[0].completed).toBe(false);
+    expect(parsedTasks[1].text).toBe(taskText2);
+    expect(parsedTasks[1].completed).toBe(false);
+
+    // Verify task IDs are generated and stored
+    expect(parsedTasks[0].id).toBeTruthy();
+    expect(parsedTasks[1].id).toBeTruthy();
+    expect(parsedTasks[0].id).not.toBe(parsedTasks[1].id);
+
+    // Verify createdAt timestamps are stored
+    expect(parsedTasks[0].createdAt).toBeTruthy();
+    expect(parsedTasks[1].createdAt).toBeTruthy();
+  });
+
+  it("should load and display tasks from LocalStorage on initialization", async () => {
+    // Arrange - Pre-populate LocalStorage with tasks
+    const existingTasks = [
+      {
+        id: "test-id-1",
+        text: "既存タスク1",
+        completed: false,
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: "test-id-2",
+        text: "既存タスク2",
+        completed: true,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+    localStorage.setItem("todoApp_tasks", JSON.stringify(existingTasks));
+
+    // Re-initialize the DOM and UIController to simulate page reload
+    document.body.innerHTML = `
+      <div id="app">
+        <main class="app-main">
+          <section class="input-section">
+            <form id="add-task-form" class="add-task-form">
+              <input 
+                type="text" 
+                id="new-task-input" 
+                class="new-task-input"
+                placeholder="新しいタスクを入力..."
+                maxlength="500"
+                required
+              />
+              <button type="submit" id="add-task-btn" class="add-task-btn">
+                追加
+              </button>
+            </form>
+          </section>
+          <section class="task-list-section">
+            <ul id="task-list" class="task-list" role="list">
+              <!-- Tasks will be loaded here -->
+            </ul>
+          </section>
+        </main>
+      </div>
+    `;
+
+    // Act - Initialize UIController (should load tasks from LocalStorage)
+    new UIController();
+
+    // Wait for async initialization to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Assert - Tasks should be displayed in the list
+    const taskList = document.getElementById("task-list")!;
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(2);
+
+    const firstTaskText = taskItems[0].querySelector(".task-text");
+    const secondTaskText = taskItems[1].querySelector(".task-text");
+    expect(firstTaskText).toHaveTextContent("既存タスク1");
+    expect(secondTaskText).toHaveTextContent("既存タスク2");
+
+    // Verify completed task has proper checkbox state
+    const firstCheckbox = taskItems[0].querySelector(
+      ".task-checkbox"
+    ) as HTMLInputElement;
+    const secondCheckbox = taskItems[1].querySelector(
+      ".task-checkbox"
+    ) as HTMLInputElement;
+    expect(firstCheckbox.checked).toBe(false);
+    expect(secondCheckbox.checked).toBe(true);
   });
 });

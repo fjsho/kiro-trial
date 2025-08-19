@@ -51,7 +51,7 @@
   - 6.3 リファクタリング（REFACTOR）
   - _Requirements: 1.2_
 
-- [ ] 7. テストケース 4: 「追加されたタスクがリストに表示される」
+- [x] 7. テストケース 4: 「追加されたタスクがリストに表示される」
 
   - 7.1 E2E テスト作成（RED）
   - 7.2 TaskRepository と LocalStorage 実装（GREEN）

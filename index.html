@@ -11,7 +11,7 @@
       <header class="app-header">
         <h1>Simple TODO App</h1>
         <div class="stats" role="status" aria-live="polite">
-          <span id="stats-text">3 個中 1 個完了</span>
+          <span id="stats-text">0 個中 0 個完了</span>
         </div>
       </header>
 
@@ -71,71 +71,7 @@
         <section class="task-list-section">
           <h2 class="visually-hidden">タスクリスト</h2>
           <ul id="task-list" class="task-list" role="list">
-            <!-- Sample tasks for initial display -->
-            <li class="task-item" data-task-id="sample-1" role="listitem">
-              <div class="task-content">
-                <input 
-                  type="checkbox" 
-                  id="task-checkbox-sample-1" 
-                  class="task-checkbox"
-                  aria-describedby="task-text-sample-1"
-                />
-                <label for="task-checkbox-sample-1" class="task-label">
-                  <span id="task-text-sample-1" class="task-text">プロジェクトの企画書を作成する</span>
-                </label>
-                <button 
-                  type="button" 
-                  class="delete-btn" 
-                  aria-label="タスク「プロジェクトの企画書を作成する」を削除"
-                  data-task-id="sample-1"
-                >
-                  ×
-                </button>
-              </div>
-            </li>
-            <li class="task-item completed" data-task-id="sample-2" role="listitem">
-              <div class="task-content">
-                <input 
-                  type="checkbox" 
-                  id="task-checkbox-sample-2" 
-                  class="task-checkbox"
-                  checked
-                  aria-describedby="task-text-sample-2"
-                />
-                <label for="task-checkbox-sample-2" class="task-label">
-                  <span id="task-text-sample-2" class="task-text">会議の議事録をまとめる</span>
-                </label>
-                <button 
-                  type="button" 
-                  class="delete-btn" 
-                  aria-label="タスク「会議の議事録をまとめる」を削除"
-                  data-task-id="sample-2"
-                >
-                  ×
-                </button>
-              </div>
-            </li>
-            <li class="task-item" data-task-id="sample-3" role="listitem">
-              <div class="task-content">
-                <input 
-                  type="checkbox" 
-                  id="task-checkbox-sample-3" 
-                  class="task-checkbox"
-                  aria-describedby="task-text-sample-3"
-                />
-                <label for="task-checkbox-sample-3" class="task-label">
-                  <span id="task-text-sample-3" class="task-text">来週のプレゼン資料を準備する</span>
-                </label>
-                <button 
-                  type="button" 
-                  class="delete-btn" 
-                  aria-label="タスク「来週のプレゼン資料を準備する」を削除"
-                  data-task-id="sample-3"
-                >
-                  ×
-                </button>
-              </div>
-            </li>
+            <!-- Tasks will be dynamically added here -->
           </ul>
           <div id="empty-state" class="empty-state" style="display: none;">
             <p>タスクがありません。新しいタスクを追加してください。</p>
