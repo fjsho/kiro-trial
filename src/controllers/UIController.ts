@@ -43,6 +43,7 @@ export class UIController {
   private bindEvents(): void {
     this.taskForm.addEventListener("submit", this.handleAddTask.bind(this));
     this.taskInput.addEventListener("keydown", this.handleKeyDown.bind(this));
+    this.taskList.addEventListener("change", this.handleTaskToggle.bind(this));
   }
 
   private handleAddTask(event: Event): void {
@@ -55,6 +56,61 @@ export class UIController {
       event.preventDefault();
       this.processTaskAddition();
     }
+  }
+
+  private async handleTaskToggle(event: Event): Promise<void> {
+    const checkbox = event.target as HTMLInputElement;
+
+    if (!this.isTaskCheckbox(checkbox)) {
+      return;
+    }
+
+    const taskItem = this.getTaskItemFromCheckbox(checkbox);
+    const taskId = this.getTaskIdFromElement(taskItem);
+
+    if (!taskId) {
+      return;
+    }
+
+    try {
+      await this.taskService.toggleTask(taskId);
+      this.updateTaskItemCompletionState(taskItem, checkbox.checked);
+      await this.refreshUI();
+    } catch (error) {
+      this.handleTaskError("Failed to toggle task", error);
+      this.revertCheckboxState(checkbox);
+    }
+  }
+
+  private isTaskCheckbox(element: HTMLInputElement): boolean {
+    return element.classList.contains("task-checkbox");
+  }
+
+  private getTaskItemFromCheckbox(checkbox: HTMLInputElement): HTMLElement {
+    const taskItem = checkbox.closest(".task-item") as HTMLElement;
+    if (!taskItem) {
+      throw new Error("Task item not found for checkbox");
+    }
+    return taskItem;
+  }
+
+  private getTaskIdFromElement(element: HTMLElement): string | null {
+    return element.getAttribute("data-task-id");
+  }
+
+  private updateTaskItemCompletionState(
+    taskItem: HTMLElement,
+    completed: boolean
+  ): void {
+    if (completed) {
+      taskItem.classList.add("completed");
+    } else {
+      taskItem.classList.remove("completed");
+    }
+  }
+
+  private revertCheckboxState(checkbox: HTMLInputElement): void {
+    checkbox.checked = !checkbox.checked;
   }
 
   private async processTaskAddition(): Promise<void> {
