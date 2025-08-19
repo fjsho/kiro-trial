@@ -42,7 +42,7 @@
   - generateTaskId() のフォーマットテスト
   - _Requirements: 1.1_
 
-- [ ] 6. TaskService 単体テスト実装
+- [x] 6. TaskService 単体テスト実装
 
   - addTask() メソッドのテスト（正常系・異常系）
   - validateTaskText() のバリデーションテスト
