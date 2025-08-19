@@ -116,7 +116,7 @@
   - 14.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 2.2_
 
-- [ ] 15. テストケース 8: 「完了状態の変更が LocalStorage に保存される」
+- [x] 15. テストケース 8: 「完了状態の変更が LocalStorage に保存される」
 
   - 15.1 Integration Test 作成（RED）- E2E レベルでの永続化確認
   - 15.2 Integration Test を通過する最小実装（GREEN）- 基本的な保存処理

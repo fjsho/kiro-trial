@@ -300,6 +300,64 @@ describe("LocalStorageTaskRepository", () => {
         "Failed to update task: Task with id 1 not found"
       );
     });
+
+    it("should toggle task completion state and persist to localStorage", async () => {
+      // Test toggling from false to true
+      const updates1 = { completed: true };
+
+      const result1 = await repository.updateTask("1", updates1);
+
+      expect(result1.id).toBe("1");
+      expect(result1.text).toBe("Task 1");
+      expect(result1.completed).toBe(true);
+      expect(result1.createdAt).toEqual(new Date("2023-01-01T00:00:00.000Z"));
+
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "todoApp_tasks",
+        JSON.stringify([
+          {
+            id: "1",
+            text: "Task 1",
+            completed: true,
+            createdAt: "2023-01-01T00:00:00.000Z",
+          },
+          {
+            id: "2",
+            text: "Task 2",
+            completed: true,
+            createdAt: "2023-01-02T00:00:00.000Z",
+          },
+        ])
+      );
+
+      // Test toggling from true to false
+      const updates2 = { completed: false };
+
+      const result2 = await repository.updateTask("1", updates2);
+
+      expect(result2.id).toBe("1");
+      expect(result2.text).toBe("Task 1");
+      expect(result2.completed).toBe(false);
+      expect(result2.createdAt).toEqual(new Date("2023-01-01T00:00:00.000Z"));
+
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "todoApp_tasks",
+        JSON.stringify([
+          {
+            id: "1",
+            text: "Task 1",
+            completed: false,
+            createdAt: "2023-01-01T00:00:00.000Z",
+          },
+          {
+            id: "2",
+            text: "Task 2",
+            completed: true,
+            createdAt: "2023-01-02T00:00:00.000Z",
+          },
+        ])
+      );
+    });
   });
 
   describe("deleteTask", () => {
