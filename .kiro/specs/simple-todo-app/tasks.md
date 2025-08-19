@@ -51,7 +51,7 @@
   - getTaskStats() 統計計算のテスト
   - _Requirements: 1.1, 1.2, 2.1, 3.1, 5.1, 6.1, 6.2, 6.3_
 
-- [ ] 7. LocalStorageTaskRepository 単体テスト実装
+- [x] 7. LocalStorageTaskRepository 単体テスト実装
   - addTask(), updateTask(), deleteTask(), getTasks() メソッドのテスト
   - serializeTask(), deserializeTask() のテスト
   - エラーハンドリングのテスト
