@@ -384,4 +384,75 @@ describe("Task Addition E2E", () => {
     expect(firstCheckbox.checked).toBe(false);
     expect(secondCheckbox.checked).toBe(true);
   });
+
+  it("should clear the input field after successfully adding a task via form submission", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const taskText = "入力フィールドクリアテスト";
+
+    // Act
+    fireEvent.change(taskInput, { target: { value: taskText } });
+
+    // Verify input has the text before submission
+    expect(taskInput.value).toBe(taskText);
+
+    fireEvent.submit(form);
+
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Assert - Input field should be cleared after successful task addition
+    expect(taskInput.value).toBe("");
+  });
+
+  it("should clear the input field after successfully adding a task via Enter key", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const taskText = "Enterキーでの入力フィールドクリアテスト";
+
+    // Act
+    fireEvent.change(taskInput, { target: { value: taskText } });
+
+    // Verify input has the text before submission
+    expect(taskInput.value).toBe(taskText);
+
+    fireEvent.keyDown(taskInput, {
+      key: "Enter",
+      code: "Enter",
+      isComposing: false,
+    });
+
+    // Wait for async operation to complete
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Assert - Input field should be cleared after successful task addition
+    expect(taskInput.value).toBe("");
+  });
+
+  it("should NOT clear the input field when task addition fails due to validation", async () => {
+    // Arrange
+    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
+    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const invalidText = "   "; // Only whitespace - should fail validation
+
+    // Act
+    fireEvent.change(taskInput, { target: { value: invalidText } });
+
+    // Verify input has the invalid text before submission
+    expect(taskInput.value).toBe(invalidText);
+
+    fireEvent.submit(form);
+
+    // Wait for any potential async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Assert - Input field should NOT be cleared when validation fails
+    expect(taskInput.value).toBe(invalidText);
+
+    // Verify no task was added
+    const taskList = document.getElementById("task-list")!;
+    const taskItems = taskList.querySelectorAll(".task-item");
+    expect(taskItems).toHaveLength(0);
+  });
 });
