@@ -30,7 +30,7 @@
 
 ## Phase 2: 実装済み機能の単体テスト追加
 
-- [ ] 4. TaskModel 単体テスト実装
+- [x] 4. TaskModel 単体テスト実装
 
   - TaskModel コンストラクタのテスト
   - デフォルト値（completed: false, createdAt: new Date()）のテスト
