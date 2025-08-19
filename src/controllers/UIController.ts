@@ -98,6 +98,13 @@ export class UIController {
     return element.getAttribute("data-task-id");
   }
 
+  /**
+   * Updates the visual completion state of a task item by adding or removing the 'completed' CSS class.
+   * This triggers the strikethrough styling for completed tasks.
+   *
+   * @param taskItem - The HTML element representing the task item
+   * @param completed - Whether the task should be marked as completed
+   */
   private updateTaskItemCompletionState(
     taskItem: HTMLElement,
     completed: boolean
