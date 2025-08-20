@@ -5,9 +5,15 @@ import { generateTaskId } from "../utils/idGenerator.js";
 
 export type FilterType = "all" | "active" | "completed";
 
+/**
+ * Interface representing task statistics
+ */
 export interface TaskStats {
+  /** Total number of tasks */
   total: number;
+  /** Number of completed tasks */
   completed: number;
+  /** Number of active (incomplete) tasks */
   active: number;
 }
 
@@ -78,6 +84,12 @@ export class TaskService {
     }
   }
 
+  /**
+   * Calculates and returns statistics about the current tasks.
+   *
+   * @returns Promise<TaskStats> Object containing total, completed, and active task counts
+   * @throws Error if repository fails to retrieve tasks
+   */
   async getTaskStats(): Promise<TaskStats> {
     const tasks = await this.getTasks();
     const completed = tasks.filter((task) => task.completed).length;
