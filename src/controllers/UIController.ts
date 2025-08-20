@@ -1,5 +1,5 @@
 import type { Task } from "../models/Task.js";
-import { TaskService } from "../services/TaskService.js";
+import { TaskService, type FilterType } from "../services/TaskService.js";
 import { LocalStorageTaskRepository } from "../repositories/LocalStorageTaskRepository.js";
 
 // Constants for validation
@@ -256,6 +256,60 @@ export class UIController {
     console.error(message, error);
     // In a real app, we might show an error message to the user
     // For now, we just log the error to prevent the app from breaking
+  }
+
+  /**
+   * Handles filter change events and updates the UI to show filtered tasks
+   * @param filter - The filter type to apply ('all', 'active', 'completed')
+   */
+  async handleFilterChange(filter: FilterType): Promise<void> {
+    if (!this.isValidFilter(filter)) {
+      console.warn(`Invalid filter type: ${filter}`);
+      return;
+    }
+
+    try {
+      // Get filtered tasks from the service
+      const filteredTasks = await this.taskService.getFilteredTasks(filter);
+
+      // Update the task list display
+      this.renderTaskList(filteredTasks);
+
+      // Update filter button states
+      this.updateFilterButtonStates(filter);
+    } catch (error) {
+      this.handleTaskError("Failed to apply filter", error);
+    }
+  }
+
+  /**
+   * Validates if the provided filter is a valid FilterType
+   * @param filter - The filter to validate
+   * @returns true if valid, false otherwise
+   */
+  private isValidFilter(filter: string): filter is FilterType {
+    return ["all", "active", "completed"].includes(filter);
+  }
+
+  /**
+   * Updates the visual state of filter buttons
+   * @param activeFilter - The currently active filter
+   */
+  private updateFilterButtonStates(activeFilter: FilterType): void {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    filterButtons.forEach((button) => {
+      const buttonFilter = button.getAttribute("data-filter");
+      const isActive = buttonFilter === activeFilter;
+
+      if (isActive) {
+        button.classList.add("active");
+        button.setAttribute("aria-pressed", "true");
+      } else {
+        button.classList.remove("active");
+        button.setAttribute("aria-pressed", "false");
+      }
+    });
   }
 
   private createTaskElement(task: Task): HTMLLIElement {
