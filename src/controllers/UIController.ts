@@ -44,6 +44,7 @@ export class UIController {
     this.taskForm.addEventListener("submit", this.handleAddTask.bind(this));
     this.taskInput.addEventListener("keydown", this.handleKeyDown.bind(this));
     this.taskList.addEventListener("change", this.handleTaskToggle.bind(this));
+    this.taskList.addEventListener("click", this.handleTaskDelete.bind(this));
   }
 
   private handleAddTask(event: Event): void {
@@ -82,8 +83,40 @@ export class UIController {
     }
   }
 
+  private async handleTaskDelete(event: Event): Promise<void> {
+    const deleteButton = event.target as HTMLButtonElement;
+
+    if (!this.isDeleteButton(deleteButton)) {
+      return;
+    }
+
+    const taskId = this.getTaskIdFromDeleteButton(deleteButton);
+
+    if (!taskId) {
+      console.warn("Delete button clicked but no task ID found");
+      return;
+    }
+
+    try {
+      await this.taskService.deleteTask(taskId);
+      await this.refreshTaskList();
+    } catch (error) {
+      this.handleTaskError("Failed to delete task", error);
+    }
+  }
+
   private isTaskCheckbox(element: HTMLInputElement): boolean {
     return element.classList.contains("task-checkbox");
+  }
+
+  private isDeleteButton(element: HTMLButtonElement): boolean {
+    return element.classList.contains("delete-btn");
+  }
+
+  private getTaskIdFromDeleteButton(
+    deleteButton: HTMLButtonElement
+  ): string | null {
+    return deleteButton.getAttribute("data-task-id");
   }
 
   private getTaskItemFromCheckbox(checkbox: HTMLInputElement): HTMLElement {
@@ -207,6 +240,15 @@ export class UIController {
       this.updateStats(tasks);
     } catch (error) {
       this.handleTaskError("Failed to refresh UI", error);
+    }
+  }
+
+  private async refreshTaskList(): Promise<void> {
+    try {
+      const tasks = await this.taskService.getTasks();
+      this.renderTaskList(tasks);
+    } catch (error) {
+      this.handleTaskError("Failed to refresh task list", error);
     }
   }
 

@@ -52,6 +52,10 @@ export class TaskService {
   }
 
   async deleteTask(id: string): Promise<void> {
+    if (!id || typeof id !== "string") {
+      throw new Error("Task ID is required and must be a string");
+    }
+
     await this.repository.deleteTask(id);
   }
 
