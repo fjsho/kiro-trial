@@ -157,7 +157,7 @@
   - 18.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 3.2, 5.3_
 
-- [ ] 19. テストケース 12: 「削除が LocalStorage に反映される」
+- [x] 19. テストケース 12: 「削除が LocalStorage に反映される」
   - 19.1 Integration Test 作成（RED）- E2E レベルでの永続化削除確認
   - 19.2 Integration Test を通過する最小実装（GREEN）- 基本的な削除保存処理
   - 19.3 リファクタリング（REFACTOR）- コードの整理
