@@ -14,6 +14,7 @@ export class UIController {
   private taskInput!: HTMLInputElement;
   private taskService: TaskService;
   private currentFilter: FilterType = "all";
+  private editingTaskId: string | null = null;
 
   constructor() {
     // Initialize dependencies
@@ -46,6 +47,7 @@ export class UIController {
     this.taskInput.addEventListener("keydown", this.handleKeyDown.bind(this));
     this.taskList.addEventListener("change", this.handleTaskToggle.bind(this));
     this.taskList.addEventListener("click", this.handleTaskDelete.bind(this));
+    this.taskList.addEventListener("dblclick", this.handleTaskEdit.bind(this));
 
     // Bind filter button events
     this.bindFilterEvents();
@@ -107,6 +109,131 @@ export class UIController {
     } catch (error) {
       this.handleTaskError("Failed to delete task", error);
     }
+  }
+
+  /**
+   * Handles double-click events on task elements to enter edit mode
+   * Only responds to double-clicks on task text elements
+   * Prevents entering edit mode if another task is already being edited
+   *
+   * @param event - The double-click event
+   */
+  private handleTaskEdit(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    // Check if the double-click was on a task text element
+    if (!this.isTaskTextElement(target)) {
+      return;
+    }
+
+    const taskItem = this.getTaskItemFromElement(target);
+    if (!taskItem) {
+      return;
+    }
+
+    const taskId = this.getTaskIdFromElement(taskItem);
+    if (!taskId) {
+      return;
+    }
+
+    // Prevent multiple edit modes
+    if (this.editingTaskId) {
+      return;
+    }
+
+    this.enterEditMode(taskItem, target, taskId);
+  }
+
+  private isTaskTextElement(element: HTMLElement): boolean {
+    return element.classList.contains("task-text");
+  }
+
+  private getTaskItemFromElement(element: HTMLElement): HTMLElement | null {
+    return element.closest(".task-item") as HTMLElement;
+  }
+
+  /**
+   * Enters edit mode for a specific task
+   * Creates an edit input field, hides the original text, and sets focus
+   *
+   * @param taskItem - The task item HTML element
+   * @param taskTextElement - The task text HTML element to be edited
+   * @param taskId - The unique identifier of the task
+   */
+  private enterEditMode(
+    taskItem: HTMLElement,
+    taskTextElement: HTMLElement,
+    taskId: string
+  ): void {
+    // Set editing state
+    this.editingTaskId = taskId;
+
+    // Get current task text
+    const currentText = taskTextElement.textContent || "";
+
+    // Create edit input with proper attributes
+    const editInput = this.createEditInput(currentText, taskId);
+
+    // Hide the original task text
+    taskTextElement.style.display = "none";
+
+    // Insert the edit input after the task text
+    taskTextElement.parentNode?.insertBefore(
+      editInput,
+      taskTextElement.nextSibling
+    );
+
+    // Focus the edit input and select all text for easy editing
+    editInput.focus();
+    editInput.select();
+  }
+
+  private createEditInput(
+    currentText: string,
+    taskId: string
+  ): HTMLInputElement {
+    const editInput = document.createElement("input");
+    editInput.type = "text";
+    editInput.className = "task-edit-input";
+    editInput.value = currentText;
+    editInput.setAttribute("data-task-id", taskId);
+    editInput.setAttribute("aria-label", "タスクを編集");
+
+    return editInput;
+  }
+
+  /**
+   * Exits edit mode for the currently editing task
+   * This method will be used in future tasks for handling Enter/Escape keys
+   */
+  private exitEditMode(): void {
+    if (!this.editingTaskId) {
+      return;
+    }
+
+    // Find the task item being edited
+    const taskItem = document.querySelector(
+      `[data-task-id="${this.editingTaskId}"]`
+    ) as HTMLElement;
+    if (!taskItem) {
+      this.editingTaskId = null;
+      return;
+    }
+
+    // Remove edit input
+    const editInput = taskItem.querySelector(".task-edit-input");
+    if (editInput) {
+      editInput.remove();
+    }
+
+    // Show original task text
+    const taskText = taskItem.querySelector(".task-text") as HTMLElement;
+    if (taskText) {
+      taskText.style.display = "";
+    }
+
+    // Clear editing state
+    this.editingTaskId = null;
   }
 
   private isTaskCheckbox(element: HTMLInputElement): boolean {
