@@ -13,6 +13,7 @@ export class UIController {
   private taskForm!: HTMLFormElement;
   private taskInput!: HTMLInputElement;
   private taskService: TaskService;
+  private currentFilter: FilterType = "all";
 
   constructor() {
     // Initialize dependencies
@@ -45,6 +46,9 @@ export class UIController {
     this.taskInput.addEventListener("keydown", this.handleKeyDown.bind(this));
     this.taskList.addEventListener("change", this.handleTaskToggle.bind(this));
     this.taskList.addEventListener("click", this.handleTaskDelete.bind(this));
+
+    // Bind filter button events
+    this.bindFilterEvents();
   }
 
   private handleAddTask(event: Event): void {
@@ -216,6 +220,23 @@ export class UIController {
     this.updateStats(tasks);
   }
 
+  /**
+   * Renders filtered task list without updating stats (stats should show all tasks)
+   * @param tasks - The filtered tasks to render
+   */
+  private renderFilteredTaskList(tasks: Task[]): void {
+    // Clear existing tasks first
+    this.taskList.innerHTML = "";
+    // Add filtered tasks to DOM
+    tasks.forEach((task) => this.addTaskToDOM(task));
+
+    // Update empty state based on filtered tasks
+    this.updateEmptyState(tasks.length === 0);
+
+    // Update stats with all tasks (not just filtered)
+    this.updateStatsWithAllTasks();
+  }
+
   private updateEmptyState(isEmpty: boolean): void {
     const emptyState = document.getElementById("empty-state");
     if (emptyState) {
@@ -233,11 +254,26 @@ export class UIController {
     }
   }
 
+  /**
+   * Updates stats with all tasks (used when filtering)
+   */
+  private async updateStatsWithAllTasks(): Promise<void> {
+    try {
+      const allTasks = await this.taskService.getTasks();
+      this.updateStats(allTasks);
+    } catch (error) {
+      this.handleTaskError("Failed to update stats", error);
+    }
+  }
+
   private async refreshUI(): Promise<void> {
     try {
-      const tasks = await this.taskService.getTasks();
-      this.updateEmptyState(tasks.length === 0);
-      this.updateStats(tasks);
+      // Only update stats and empty state, don't change the current filter view
+      await this.updateStatsWithAllTasks();
+
+      // Update empty state based on current displayed tasks
+      const displayedTasks = document.querySelectorAll("#task-list .task-item");
+      this.updateEmptyState(displayedTasks.length === 0);
     } catch (error) {
       this.handleTaskError("Failed to refresh UI", error);
     }
@@ -245,8 +281,14 @@ export class UIController {
 
   private async refreshTaskList(): Promise<void> {
     try {
-      const tasks = await this.taskService.getTasks();
-      this.renderTaskList(tasks);
+      // If we're currently filtering, maintain the filter
+      if (this.currentFilter !== "all") {
+        await this.handleFilterChange(this.currentFilter);
+      } else {
+        // Otherwise, show all tasks
+        const tasks = await this.taskService.getTasks();
+        this.renderTaskList(tasks);
+      }
     } catch (error) {
       this.handleTaskError("Failed to refresh task list", error);
     }
@@ -256,6 +298,52 @@ export class UIController {
     console.error(message, error);
     // In a real app, we might show an error message to the user
     // For now, we just log the error to prevent the app from breaking
+  }
+
+  /**
+   * Binds click events to filter buttons
+   */
+  private bindFilterEvents(): void {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    if (filterButtons.length === 0) {
+      console.warn(
+        "No filter buttons found. Filter functionality will not be available."
+      );
+      return;
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", this.handleFilterButtonClick.bind(this));
+    });
+  }
+
+  /**
+   * Handles filter button click events
+   * @param event - The click event
+   */
+  private async handleFilterButtonClick(event: Event): Promise<void> {
+    const button = event.target as HTMLButtonElement;
+
+    if (!button || !button.hasAttribute("data-filter")) {
+      console.warn(
+        "Invalid filter button clicked - missing data-filter attribute"
+      );
+      return;
+    }
+
+    const filter = button.getAttribute("data-filter") as FilterType;
+
+    if (!filter || !this.isValidFilter(filter)) {
+      console.warn(`Invalid filter button clicked: ${filter}`);
+      return;
+    }
+
+    try {
+      await this.handleFilterChange(filter);
+    } catch (error) {
+      this.handleTaskError("Failed to handle filter change", error);
+    }
   }
 
   /**
@@ -269,11 +357,14 @@ export class UIController {
     }
 
     try {
+      // Update current filter
+      this.currentFilter = filter;
+
       // Get filtered tasks from the service
       const filteredTasks = await this.taskService.getFilteredTasks(filter);
 
       // Update the task list display
-      this.renderTaskList(filteredTasks);
+      this.renderFilteredTaskList(filteredTasks);
 
       // Update filter button states
       this.updateFilterButtonStates(filter);
