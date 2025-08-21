@@ -383,23 +383,26 @@ export class UIController {
   }
 
   /**
-   * Updates the visual state of filter buttons
-   * @param activeFilter - The currently active filter
+   * Updates the visual state of filter buttons by adding/removing the 'active' CSS class
+   * and setting the appropriate aria-pressed attribute for accessibility.
+   *
+   * @param activeFilter - The currently active filter type
    */
   private updateFilterButtonStates(activeFilter: FilterType): void {
-    const filterButtons = document.querySelectorAll(".filter-btn");
+    const filterButtons =
+      document.querySelectorAll<HTMLButtonElement>(".filter-btn");
 
     filterButtons.forEach((button) => {
-      const buttonFilter = button.getAttribute("data-filter");
+      const buttonFilter = button.getAttribute(
+        "data-filter"
+      ) as FilterType | null;
       const isActive = buttonFilter === activeFilter;
 
-      if (isActive) {
-        button.classList.add("active");
-        button.setAttribute("aria-pressed", "true");
-      } else {
-        button.classList.remove("active");
-        button.setAttribute("aria-pressed", "false");
-      }
+      // Update visual state
+      button.classList.toggle("active", isActive);
+
+      // Update accessibility state
+      button.setAttribute("aria-pressed", isActive.toString());
     });
   }
 
