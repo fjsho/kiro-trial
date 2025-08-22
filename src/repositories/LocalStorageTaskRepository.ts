@@ -19,6 +19,9 @@ export class LocalStorageTaskRepository implements TaskRepository {
     TASK_NOT_FOUND: "Task not found",
     STORAGE_FAILED: "Failed to save tasks to localStorage",
     LOAD_FAILED: "Failed to load tasks from localStorage",
+    INVALID_DATA_FORMAT: "Invalid data format in localStorage: expected array",
+    INVALID_TASK_STRUCTURE: "Invalid stored task structure",
+    INVALID_DATE: "Invalid createdAt date",
   } as const;
 
   async addTask(task: Task): Promise<Task> {
@@ -77,6 +80,18 @@ export class LocalStorageTaskRepository implements TaskRepository {
     }
   }
 
+  /**
+   * Retrieves all tasks from localStorage with robust error handling and data validation.
+   *
+   * This method handles various error scenarios gracefully:
+   * - Empty or missing localStorage data
+   * - Corrupted JSON data
+   * - Invalid task structures
+   * - Invalid date formats
+   * - localStorage access errors
+   *
+   * @returns Promise<Task[]> Array of valid tasks, or empty array if no valid tasks found
+   */
   async getTasks(): Promise<Task[]> {
     try {
       const storedData = localStorage.getItem(this.STORAGE_KEY);
@@ -85,8 +100,33 @@ export class LocalStorageTaskRepository implements TaskRepository {
         return [];
       }
 
-      const storedTasks: StoredTask[] = JSON.parse(storedData);
-      return storedTasks.map(this.deserializeTask);
+      const parsedData = JSON.parse(storedData);
+
+      // Validate that parsed data is an array
+      if (!Array.isArray(parsedData)) {
+        console.error(
+          LocalStorageTaskRepository.ERROR_MESSAGES.INVALID_DATA_FORMAT
+        );
+        return [];
+      }
+
+      const storedTasks: StoredTask[] = parsedData;
+
+      // Filter and deserialize only valid tasks
+      const validTasks: Task[] = [];
+      for (const storedTask of storedTasks) {
+        try {
+          const task = this.deserializeTask(storedTask);
+          if (this.isValidTask(task)) {
+            validTasks.push(task);
+          }
+        } catch (error) {
+          console.warn("Skipping invalid task during deserialization:", error);
+          // Continue processing other tasks
+        }
+      }
+
+      return validTasks;
     } catch (error) {
       console.error("Failed to load tasks from localStorage:", error);
       // Return empty array instead of throwing to allow app to continue functioning
@@ -117,11 +157,63 @@ export class LocalStorageTaskRepository implements TaskRepository {
   }
 
   private deserializeTask(storedTask: StoredTask): Task {
+    // Validate required fields exist and are of correct type
+    if (!this.isValidStoredTask(storedTask)) {
+      throw new Error(
+        LocalStorageTaskRepository.ERROR_MESSAGES.INVALID_TASK_STRUCTURE
+      );
+    }
+
+    const createdAt = new Date(storedTask.createdAt);
+
+    // Validate that the date is valid
+    if (isNaN(createdAt.getTime())) {
+      throw new Error(LocalStorageTaskRepository.ERROR_MESSAGES.INVALID_DATE);
+    }
+
     return new TaskModel(
       storedTask.id,
       storedTask.text,
       storedTask.completed,
-      new Date(storedTask.createdAt)
+      createdAt
+    );
+  }
+
+  /**
+   * Validates that a stored task object has all required fields with correct types.
+   *
+   * @param storedTask - The object to validate
+   * @returns true if the object is a valid StoredTask, false otherwise
+   */
+  private isValidStoredTask(storedTask: any): storedTask is StoredTask {
+    return (
+      typeof storedTask === "object" &&
+      storedTask !== null &&
+      typeof storedTask.id === "string" &&
+      storedTask.id.length > 0 &&
+      typeof storedTask.text === "string" &&
+      storedTask.text.length > 0 &&
+      typeof storedTask.completed === "boolean" &&
+      typeof storedTask.createdAt === "string" &&
+      storedTask.createdAt.length > 0
+    );
+  }
+
+  /**
+   * Validates that a deserialized task object is valid and complete.
+   *
+   * @param task - The Task object to validate
+   * @returns true if the task is valid, false otherwise
+   */
+  private isValidTask(task: Task): boolean {
+    return (
+      typeof task.id === "string" &&
+      task.id.length > 0 &&
+      typeof task.text === "string" &&
+      task.text.length > 0 &&
+      typeof task.completed === "boolean" &&
+      task.createdAt instanceof Date &&
+      !isNaN(task.createdAt.getTime())
     );
   }
 
