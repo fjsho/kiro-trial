@@ -202,6 +202,9 @@ export class UIController {
     // Add event listeners for Enter and Escape keys
     editInput.addEventListener("keydown", this.handleEditKeyDown.bind(this));
 
+    // Add blur event listener to save on focus loss
+    editInput.addEventListener("blur", this.handleEditBlur.bind(this));
+
     return editInput;
   }
 
@@ -216,6 +219,13 @@ export class UIController {
       event.preventDefault();
       this.cancelEdit();
     }
+  }
+
+  /**
+   * Handles blur events in edit mode (save on focus loss)
+   */
+  private async handleEditBlur(event: FocusEvent): Promise<void> {
+    await this.saveEditedTask(event.target as HTMLInputElement);
   }
 
   /**
