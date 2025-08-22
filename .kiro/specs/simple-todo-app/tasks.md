@@ -239,7 +239,7 @@
   - 26.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.2_
 
-- [ ] 27. テストケース 20: 「Escape キーで編集がキャンセルされる」
+- [x] 27. テストケース 20: 「Escape キーで編集がキャンセルされる」
 
   - 27.1 Integration Test 作成（RED）- E2E レベルでの編集キャンセル確認
   - 27.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集キャンセル処理
