@@ -37,6 +37,10 @@ export class UIController {
   private editingTaskId: string | null = null;
   private errorTimeoutId: number | null = null;
 
+  // Cached DOM elements for performance
+  private emptyStateElement: HTMLElement | null = null;
+  private statsTextElement: HTMLElement | null = null;
+
   constructor() {
     // Initialize dependencies
     const repository = new LocalStorageTaskRepository();
@@ -460,19 +464,26 @@ export class UIController {
   }
 
   private updateEmptyState(isEmpty: boolean): void {
-    const emptyState = document.getElementById("empty-state");
-    if (emptyState) {
-      emptyState.style.display = isEmpty ? "block" : "none";
+    // Cache the empty state element to avoid repeated DOM queries
+    if (!this.emptyStateElement) {
+      this.emptyStateElement = document.getElementById("empty-state");
+    }
+    if (this.emptyStateElement) {
+      this.emptyStateElement.style.display = isEmpty ? "block" : "none";
     }
   }
 
   private updateStats(tasks: Task[]): void {
     const total = tasks.length;
     const completed = tasks.filter((task) => task.completed).length;
-    const statsText = document.getElementById("stats-text");
 
-    if (statsText) {
-      statsText.textContent = `${total} 個中 ${completed} 個完了`;
+    // Cache the stats element to avoid repeated DOM queries
+    if (!this.statsTextElement) {
+      this.statsTextElement = document.getElementById("stats-text");
+    }
+
+    if (this.statsTextElement) {
+      this.statsTextElement.textContent = `${total} 個中 ${completed} 個完了`;
     }
   }
 
@@ -609,7 +620,8 @@ export class UIController {
    * Binds click events to filter buttons
    */
   private bindFilterEvents(): void {
-    const filterButtons = document.querySelectorAll(".filter-btn");
+    const filterButtons =
+      document.querySelectorAll<HTMLButtonElement>(".filter-btn");
 
     if (filterButtons.length === 0) {
       console.warn(
@@ -694,6 +706,7 @@ export class UIController {
    * @param activeFilter - The currently active filter type
    */
   private updateFilterButtonStates(activeFilter: FilterType): void {
+    // Get current filter buttons (don't cache here as buttons might be added dynamically in tests)
     const filterButtons =
       document.querySelectorAll<HTMLButtonElement>(".filter-btn");
 
@@ -706,7 +719,7 @@ export class UIController {
       // Update visual state
       button.classList.toggle("active", isActive);
 
-      // Update accessibility state
+      // Update accessibility state - always set aria-pressed, even for buttons without data-filter
       button.setAttribute("aria-pressed", isActive.toString());
     });
   }
