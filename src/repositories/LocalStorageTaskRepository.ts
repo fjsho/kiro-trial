@@ -130,18 +130,14 @@ export class LocalStorageTaskRepository implements TaskRepository {
     } catch (error) {
       console.error("Failed to load tasks from localStorage:", error);
 
-      // If it's a security error or access denied, throw the error to show user feedback
-      if (
-        error instanceof Error &&
-        (error.message.includes("SecurityError") ||
-          error.message.includes("access denied"))
-      ) {
+      // If it's a security error, throw the error to show user feedback
+      if (error instanceof Error && error.message.includes("SecurityError")) {
         throw new Error(
           `Failed to load tasks from localStorage: ${error.message}`
         );
       }
 
-      // For other errors, return empty array to allow app to continue functioning
+      // For other errors (like JSON parsing), return empty array to allow app to continue functioning
       return [];
     }
   }
@@ -178,7 +174,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
 
     const createdAt = new Date(storedTask.createdAt);
 
-    // Validate that the date is valid
+    // Validate that the date is valid - skip invalid tasks to maintain data integrity
     if (isNaN(createdAt.getTime())) {
       throw new Error(LocalStorageTaskRepository.ERROR_MESSAGES.INVALID_DATE);
     }

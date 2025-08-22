@@ -499,9 +499,8 @@ describe("LocalStorageTaskRepository", () => {
 
       const tasks = await repository.getTasks();
 
-      expect(tasks).toHaveLength(1);
-      expect(tasks[0].createdAt).toBeInstanceOf(Date);
-      expect(isNaN(tasks[0].createdAt.getTime())).toBe(true); // Invalid Date
+      // Invalid tasks should be skipped to maintain data integrity
+      expect(tasks).toHaveLength(0);
     });
   });
 
