@@ -259,7 +259,7 @@
   - 28.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.4_
 
-- [ ] 29. テストケース 22: 「編集内容が LocalStorage に保存される」
+- [x] 29. テストケース 22: 「編集内容が LocalStorage に保存される」
   - 29.1 Integration Test 作成（RED）- E2E レベルでの編集内容永続化確認
   - 29.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集内容保存処理
   - 29.3 リファクタリング（REFACTOR）- コードの整理
