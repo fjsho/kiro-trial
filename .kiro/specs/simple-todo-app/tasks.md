@@ -219,7 +219,7 @@
   - 24.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.1_
 
-- [ ] 25. テストケース 18: 「Enter キーで編集内容が保存される」
+- [x] 25. テストケース 18: 「Enter キーで編集内容が保存される」
 
   - 25.1 Integration Test 作成（RED）- E2E レベルでの編集保存確認
   - 25.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集保存処理

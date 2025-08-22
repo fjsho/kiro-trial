@@ -199,12 +199,76 @@ export class UIController {
     editInput.setAttribute("data-task-id", taskId);
     editInput.setAttribute("aria-label", "タスクを編集");
 
+    // Add event listeners for Enter and Escape keys
+    editInput.addEventListener("keydown", this.handleEditKeyDown.bind(this));
+
     return editInput;
   }
 
   /**
+   * Handles keydown events in edit mode (Enter to save, Escape to cancel)
+   */
+  private async handleEditKeyDown(event: KeyboardEvent): Promise<void> {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      await this.saveEditedTask(event.target as HTMLInputElement);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      this.cancelEdit();
+    }
+  }
+
+  /**
+   * Saves the edited task content and exits edit mode
+   */
+  private async saveEditedTask(editInput: HTMLInputElement): Promise<void> {
+    const newText = editInput.value.trim();
+    const taskId = editInput.getAttribute("data-task-id");
+
+    if (!taskId) {
+      console.warn("No task ID found for edit input");
+      this.exitEditMode();
+      return;
+    }
+
+    // If text is empty, cancel the edit instead of saving
+    if (!newText) {
+      this.cancelEdit();
+      return;
+    }
+
+    try {
+      // Update the task through the service
+      await this.taskService.updateTask(taskId, { text: newText });
+
+      // Update the UI
+      const taskItem = document.querySelector(
+        `[data-task-id="${taskId}"]`
+      ) as HTMLElement;
+      if (taskItem) {
+        const taskText = taskItem.querySelector(".task-text") as HTMLElement;
+        if (taskText) {
+          taskText.textContent = newText;
+        }
+      }
+
+      // Exit edit mode
+      this.exitEditMode();
+    } catch (error) {
+      this.handleTaskError("Failed to update task", error);
+      this.exitEditMode();
+    }
+  }
+
+  /**
+   * Cancels the edit and exits edit mode without saving changes
+   */
+  private cancelEdit(): void {
+    this.exitEditMode();
+  }
+
+  /**
    * Exits edit mode for the currently editing task
-   * This method will be used in future tasks for handling Enter/Escape keys
    */
   private exitEditMode(): void {
     if (!this.editingTaskId) {
