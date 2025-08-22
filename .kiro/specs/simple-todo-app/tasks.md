@@ -280,7 +280,7 @@
   - 30.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 全要件_
 
-- [ ] 31. テストケース 24: 「LocalStorage エラー時にエラーメッセージが表示される」
+- [x] 31. テストケース 24: 「LocalStorage エラー時にエラーメッセージが表示される」
   - 31.1 Integration Test 作成（RED）- E2E レベルでのエラー表示確認
   - 31.2 Integration Test を通過する最小実装（GREEN）- 基本的なエラー表示処理
   - 31.3 リファクタリング（REFACTOR）- コードの整理

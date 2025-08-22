@@ -129,7 +129,19 @@ export class LocalStorageTaskRepository implements TaskRepository {
       return validTasks;
     } catch (error) {
       console.error("Failed to load tasks from localStorage:", error);
-      // Return empty array instead of throwing to allow app to continue functioning
+
+      // If it's a security error or access denied, throw the error to show user feedback
+      if (
+        error instanceof Error &&
+        (error.message.includes("SecurityError") ||
+          error.message.includes("access denied"))
+      ) {
+        throw new Error(
+          `Failed to load tasks from localStorage: ${error.message}`
+        );
+      }
+
+      // For other errors, return empty array to allow app to continue functioning
       return [];
     }
   }

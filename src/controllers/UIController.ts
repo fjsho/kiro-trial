@@ -8,6 +8,26 @@ const VALIDATION_RULES = {
   MAX_TASK_LENGTH: 500,
 } as const;
 
+// Constants for error handling
+const ERROR_DISPLAY_DURATION = 5000; // 5 seconds
+
+// Error message constants
+const ERROR_MESSAGES = {
+  QUOTA_EXCEEDED:
+    "ストレージの容量が不足しています。不要なデータを削除してください。",
+  SAVE_FAILED:
+    "保存に失敗しました。しばらく時間をおいてから再度お試しください。",
+  LOAD_FAILED:
+    "データの読み込みに失敗しました。ページを再読み込みしてください。",
+  UPDATE_FAILED: "タスクの更新に失敗しました。再度お試しください。",
+  DELETE_FAILED: "タスクの削除に失敗しました。再度お試しください。",
+  GENERIC_ERROR:
+    "操作に失敗しました。しばらく時間をおいてから再度お試しください。",
+} as const;
+
+// Error element ID constant
+const ERROR_ELEMENT_ID = "error-message";
+
 export class UIController {
   private taskList!: HTMLElement;
   private taskForm!: HTMLFormElement;
@@ -15,6 +35,7 @@ export class UIController {
   private taskService: TaskService;
   private currentFilter: FilterType = "all";
   private editingTaskId: string | null = null;
+  private errorTimeoutId: number | null = null;
 
   constructor() {
     // Initialize dependencies
@@ -497,8 +518,91 @@ export class UIController {
 
   private handleTaskError(message: string, error: unknown): void {
     console.error(message, error);
-    // In a real app, we might show an error message to the user
-    // For now, we just log the error to prevent the app from breaking
+    this.showErrorMessage(message, error);
+  }
+
+  /**
+   * エラーメッセージを表示する
+   *
+   * エラーメッセージ要素にメッセージを表示し、指定時間後に自動的に非表示にします。
+   * 複数のエラーが連続で発生した場合は、前のタイマーをクリアして新しいメッセージを表示します。
+   *
+   * @param message - 表示するメッセージ（エラーの文脈情報）
+   * @param error - エラーオブジェクト（Error インスタンスまたは任意の値）
+   */
+  private showErrorMessage(message: string, error: unknown): void {
+    const errorElement = document.getElementById(ERROR_ELEMENT_ID);
+    if (!errorElement) {
+      console.warn("Error message element not found");
+      return;
+    }
+
+    // エラーの種類に応じてメッセージを決定
+    const displayMessage = this.getErrorDisplayMessage(message, error);
+
+    // エラーメッセージを表示
+    errorElement.textContent = displayMessage;
+    errorElement.style.display = "block";
+
+    // 既存のタイマーをクリア（複数のエラーが連続で発生した場合）
+    if (this.errorTimeoutId) {
+      clearTimeout(this.errorTimeoutId);
+    }
+
+    // 指定時間後に自動的に非表示にする
+    this.errorTimeoutId = setTimeout(() => {
+      errorElement.style.display = "none";
+      this.errorTimeoutId = null;
+    }, ERROR_DISPLAY_DURATION);
+  }
+
+  /**
+   * エラーの種類に応じて適切な表示メッセージを取得する
+   *
+   * LocalStorage関連のエラー、CRUD操作のエラーなどを判定し、
+   * ユーザーにとって分かりやすいメッセージを返します。
+   *
+   * @param message - 基本メッセージ（エラーの文脈情報）
+   * @param error - エラーオブジェクト（Error インスタンスまたは任意の値）
+   * @returns ユーザー向けの表示用メッセージ
+   */
+  private getErrorDisplayMessage(message: string, error: unknown): string {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    // QuotaExceededError を最初にチェック（より具体的なエラー）
+    if (
+      errorMessage.includes("QuotaExceededError") ||
+      (error instanceof Error && error.name === "QuotaExceededError")
+    ) {
+      return ERROR_MESSAGES.QUOTA_EXCEEDED;
+    }
+
+    // 読み込みエラーをチェック
+    if (
+      errorMessage.includes("Failed to load tasks from localStorage") ||
+      message.includes("Failed to load initial tasks")
+    ) {
+      return ERROR_MESSAGES.LOAD_FAILED;
+    }
+
+    // 保存エラーをチェック（QuotaExceededError以外の保存エラー）
+    if (
+      errorMessage.includes("Failed to save tasks to localStorage") ||
+      errorMessage.includes("Failed to add task")
+    ) {
+      return ERROR_MESSAGES.SAVE_FAILED;
+    }
+
+    if (errorMessage.includes("Failed to update task")) {
+      return ERROR_MESSAGES.UPDATE_FAILED;
+    }
+
+    if (errorMessage.includes("Failed to delete task")) {
+      return ERROR_MESSAGES.DELETE_FAILED;
+    }
+
+    // デフォルトメッセージ
+    return ERROR_MESSAGES.GENERIC_ERROR;
   }
 
   /**
