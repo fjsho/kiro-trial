@@ -229,73 +229,83 @@
   - 25.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.2_
 
-- [ ] 26. テストケース 19: 「Escape キーで編集がキャンセルされる」
+- [ ] 26. テストケース 19: 「フォーカスを外すことで編集内容が保存される」
 
-  - 26.1 Integration Test 作成（RED）- E2E レベルでの編集キャンセル確認
-  - 26.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集キャンセル処理
+  - 26.1 Integration Test 作成（RED）- E2E レベルでのフォーカス離脱時保存確認
+  - 26.2 Integration Test を通過する最小実装（GREEN）- 基本的な blur イベント処理
   - 26.3 リファクタリング（REFACTOR）- コードの整理
-  - 26.4 Unit Test 作成（RED）- 編集キャンセルロジックの詳細テスト
-  - 26.5 Unit Test を通過する最小実装（GREEN）- キャンセル処理メソッドの実装
+  - 26.4 Unit Test 作成（RED）- フォーカス離脱時の保存ロジックの詳細テスト
+  - 26.5 Unit Test を通過する最小実装（GREEN）- blur イベントハンドラーの実装
   - 26.6 リファクタリング（REFACTOR）- 最終的な改善
+  - _Requirements: 4.2_
+
+- [ ] 27. テストケース 20: 「Escape キーで編集がキャンセルされる」
+
+  - 27.1 Integration Test 作成（RED）- E2E レベルでの編集キャンセル確認
+  - 27.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集キャンセル処理
+  - 27.3 リファクタリング（REFACTOR）- コードの整理
+  - 27.4 Unit Test 作成（RED）- 編集キャンセルロジックの詳細テスト
+  - 27.5 Unit Test を通過する最小実装（GREEN）- キャンセル処理メソッドの実装
+  - 27.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.3_
 
-- [ ] 27. テストケース 20: 「空文字で保存すると変更が破棄される」
+- [ ] 28. テストケース 21: 「空文字で保存すると変更が破棄される」
 
-  - 27.1 Integration Test 作成（RED）- E2E レベルでの空文字バリデーション確認
-  - 27.2 Integration Test を通過する最小実装（GREEN）- 基本的な空文字処理
-  - 27.3 リファクタリング（REFACTOR）- コードの整理
-  - 27.4 Unit Test 作成（RED）- 編集時の空文字バリデーションの詳細テスト
-  - 27.5 Unit Test を通過する最小実装（GREEN）- 空文字バリデーションメソッドの実装
-  - 27.6 リファクタリング（REFACTOR）- 最終的な改善
+  - 28.1 Integration Test 作成（RED）- E2E レベルでの空文字バリデーション確認
+  - 28.2 Integration Test を通過する最小実装（GREEN）- 基本的な空文字処理
+  - 28.3 リファクタリング（REFACTOR）- コードの整理
+  - 28.4 Unit Test 作成（RED）- 編集時の空文字バリデーションの詳細テスト
+  - 28.5 Unit Test を通過する最小実装（GREEN）- 空文字バリデーションメソッドの実装
+  - 28.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.4_
 
-- [ ] 28. テストケース 21: 「編集内容が LocalStorage に保存される」
-  - 28.1 Integration Test 作成（RED）- E2E レベルでの編集内容永続化確認
-  - 28.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集内容保存処理
-  - 28.3 リファクタリング（REFACTOR）- コードの整理
-  - 28.4 Unit Test 作成（RED）- LocalStorageTaskRepository.updateTask() 編集対応の詳細テスト
-  - 28.5 Unit Test を通過する最小実装（GREEN）- 編集対応 updateTask メソッドの実装
-  - 28.6 リファクタリング（REFACTOR）- 最終的な改善
+- [ ] 29. テストケース 22: 「編集内容が LocalStorage に保存される」
+  - 29.1 Integration Test 作成（RED）- E2E レベルでの編集内容永続化確認
+  - 29.2 Integration Test を通過する最小実装（GREEN）- 基本的な編集内容保存処理
+  - 29.3 リファクタリング（REFACTOR）- コードの整理
+  - 29.4 Unit Test 作成（RED）- LocalStorageTaskRepository.updateTask() 編集対応の詳細テスト
+  - 29.5 Unit Test を通過する最小実装（GREEN）- 編集対応 updateTask メソッドの実装
+  - 29.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 4.1, 4.2_
 
 ## Phase 8: データ永続化の検証 (1 テストケースずつ TDD)
 
-- [ ] 29. テストケース 22: 「ページリロード後もタスクが保持される」
+- [ ] 30. テストケース 23: 「ページリロード後もタスクが保持される」
 
-  - 29.1 Integration Test 作成（RED）- E2E レベルでのページリロード後データ保持確認
-  - 29.2 Integration Test を通過する最小実装（GREEN）- 基本的な初期化時データ読み込み処理
-  - 29.3 リファクタリング（REFACTOR）- コードの整理
-  - 29.4 Unit Test 作成（RED）- LocalStorageTaskRepository.getTasks() 初期化の詳細テスト
-  - 29.5 Unit Test を通過する最小実装（GREEN）- 初期化処理メソッドの実装
-  - 29.6 リファクタリング（REFACTOR）- 最終的な改善
+  - 30.1 Integration Test 作成（RED）- E2E レベルでのページリロード後データ保持確認
+  - 30.2 Integration Test を通過する最小実装（GREEN）- 基本的な初期化時データ読み込み処理
+  - 30.3 リファクタリング（REFACTOR）- コードの整理
+  - 30.4 Unit Test 作成（RED）- LocalStorageTaskRepository.getTasks() 初期化の詳細テスト
+  - 30.5 Unit Test を通過する最小実装（GREEN）- 初期化処理メソッドの実装
+  - 30.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 全要件_
 
-- [ ] 30. テストケース 23: 「LocalStorage エラー時にエラーメッセージが表示される」
-  - 30.1 Integration Test 作成（RED）- E2E レベルでのエラー表示確認
-  - 30.2 Integration Test を通過する最小実装（GREEN）- 基本的なエラー表示処理
-  - 30.3 リファクタリング（REFACTOR）- コードの整理
-  - 30.4 Unit Test 作成（RED）- エラーハンドリングロジックの詳細テスト
-  - 30.5 Unit Test を通過する最小実装（GREEN）- エラーハンドリングメソッドの実装
-  - 30.6 リファクタリング（REFACTOR）- 最終的な改善
+- [ ] 31. テストケース 24: 「LocalStorage エラー時にエラーメッセージが表示される」
+  - 31.1 Integration Test 作成（RED）- E2E レベルでのエラー表示確認
+  - 31.2 Integration Test を通過する最小実装（GREEN）- 基本的なエラー表示処理
+  - 31.3 リファクタリング（REFACTOR）- コードの整理
+  - 31.4 Unit Test 作成（RED）- エラーハンドリングロジックの詳細テスト
+  - 31.5 Unit Test を通過する最小実装（GREEN）- エラーハンドリングメソッドの実装
+  - 31.6 リファクタリング（REFACTOR）- 最終的な改善
   - _Requirements: 全要件_
 
 ## Phase 9: 最終統合とポリッシュ
 
-- [ ] 31. アプリケーション初期化とエントリーポイント
+- [ ] 32. アプリケーション初期化とエントリーポイント
 
-  - 31.1 Integration Test 作成（RED）- E2E レベルでのアプリケーション初期化確認
-  - 31.2 Integration Test を通過する最小実装（GREEN）- 基本的な初期化処理
-  - 31.3 リファクタリング（REFACTOR）- コードの整理
-  - 31.4 Unit Test 作成（RED）- アプリケーション初期化ロジックの詳細テスト
-  - 31.5 Unit Test を通過する最小実装（GREEN）- 初期化メソッドの実装
-  - 31.6 リファクタリング（REFACTOR）- 最終的な改善
-  - 31.7 main.ts ファイルの作成と依存関係の組み立て
+  - 32.1 Integration Test 作成（RED）- E2E レベルでのアプリケーション初期化確認
+  - 32.2 Integration Test を通過する最小実装（GREEN）- 基本的な初期化処理
+  - 32.3 リファクタリング（REFACTOR）- コードの整理
+  - 32.4 Unit Test 作成（RED）- アプリケーション初期化ロジックの詳細テスト
+  - 32.5 Unit Test を通過する最小実装（GREEN）- 初期化メソッドの実装
+  - 32.6 リファクタリング（REFACTOR）- 最終的な改善
+  - 32.7 main.ts ファイルの作成と依存関係の組み立て
   - _Requirements: 全要件_
 
-- [ ] 32. 最終品質向上
-  - 32.1 単体テストカバレッジの確認と補完
-  - 32.2 Integration テストカバレッジの確認と補完
-  - 32.3 アクセシビリティの最終確認
-  - 32.4 パフォーマンス最適化
-  - 32.5 ユーザビリティの向上
+- [ ] 33. 最終品質向上
+  - 33.1 単体テストカバレッジの確認と補完
+  - 33.2 Integration テストカバレッジの確認と補完
+  - 33.3 アクセシビリティの最終確認
+  - 33.4 パフォーマンス最適化
+  - 33.5 ユーザビリティの向上
   - _Requirements: 全要件の品質保証_
