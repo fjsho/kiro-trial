@@ -5,8 +5,8 @@
  * Requirements: 4.1 - WHEN ユーザーがタスクテキストをダブルクリック THEN システムはそのタスクを編集モードに切り替える
  */
 
-import { beforeEach, describe, expect, it } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { beforeEach, describe, expect, it } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Setup DOM environment for testing
 function setupDOM(): void {
@@ -86,7 +86,7 @@ function setupDOM(): void {
   `;
 }
 
-describe("Task Edit Mode - Double Click Integration", () => {
+describe('Task Edit Mode - Double Click Integration', () => {
   let uiController: UIController;
 
   beforeEach(() => {
@@ -100,26 +100,26 @@ describe("Task Edit Mode - Double Click Integration", () => {
     uiController = new UIController();
   });
 
-  it("should enter edit mode when task text is double-clicked", async () => {
+  it('should enter edit mode when task text is double-clicked', async () => {
     // Arrange: Add a task first
     const taskInput = document.getElementById(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
-    const addForm = document.getElementById("add-task-form") as HTMLFormElement;
+    const addForm = document.getElementById('add-task-form') as HTMLFormElement;
 
-    taskInput.value = "Test task for editing";
-    addForm.dispatchEvent(new Event("submit"));
+    taskInput.value = 'Test task for editing';
+    addForm.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added to DOM
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     // Get the task text element
-    const taskTextElement = document.querySelector(".task-text") as HTMLElement;
+    const taskTextElement = document.querySelector('.task-text') as HTMLElement;
     expect(taskTextElement).toBeTruthy();
-    expect(taskTextElement.textContent).toBe("Test task for editing");
+    expect(taskTextElement.textContent).toBe('Test task for editing');
 
     // Act: Double-click on the task text
-    const dblClickEvent = new MouseEvent("dblclick", {
+    const dblClickEvent = new MouseEvent('dblclick', {
       bubbles: true,
       cancelable: true,
     });
@@ -127,85 +127,85 @@ describe("Task Edit Mode - Double Click Integration", () => {
 
     // Assert: Task should be in edit mode
     // In edit mode, the task text should be replaced with an input field
-    const taskItem = taskTextElement.closest(".task-item") as HTMLElement;
+    const taskItem = taskTextElement.closest('.task-item') as HTMLElement;
     expect(taskItem).toBeTruthy();
 
     // Check if edit mode is active (this will fail initially - RED phase)
     const editInput = taskItem.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
     expect(editInput).toBeTruthy();
-    expect(editInput.value).toBe("Test task for editing");
+    expect(editInput.value).toBe('Test task for editing');
 
     // The original task text should be hidden or replaced
     const originalTaskText = taskItem.querySelector(
-      ".task-text"
+      '.task-text'
     ) as HTMLElement;
-    expect(originalTaskText.style.display).toBe("none");
+    expect(originalTaskText.style.display).toBe('none');
   });
 
-  it("should show edit input with current task text when entering edit mode", async () => {
+  it('should show edit input with current task text when entering edit mode', async () => {
     // Arrange: Add a task with specific text
     const taskInput = document.getElementById(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
-    const addForm = document.getElementById("add-task-form") as HTMLFormElement;
+    const addForm = document.getElementById('add-task-form') as HTMLFormElement;
 
-    const originalText = "Original task text";
+    const originalText = 'Original task text';
     taskInput.value = originalText;
-    addForm.dispatchEvent(new Event("submit"));
+    addForm.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added to DOM
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     // Get the task text element
-    const taskTextElement = document.querySelector(".task-text") as HTMLElement;
+    const taskTextElement = document.querySelector('.task-text') as HTMLElement;
 
     // Act: Double-click to enter edit mode
-    const dblClickEvent = new MouseEvent("dblclick", {
+    const dblClickEvent = new MouseEvent('dblclick', {
       bubbles: true,
       cancelable: true,
     });
     taskTextElement.dispatchEvent(dblClickEvent);
 
     // Assert: Edit input should contain the original text
-    const taskItem = taskTextElement.closest(".task-item") as HTMLElement;
+    const taskItem = taskTextElement.closest('.task-item') as HTMLElement;
     const editInput = taskItem.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
 
     expect(editInput).toBeTruthy();
     expect(editInput.value).toBe(originalText);
-    expect(editInput.type).toBe("text");
+    expect(editInput.type).toBe('text');
   });
 
-  it("should focus the edit input when entering edit mode", async () => {
+  it('should focus the edit input when entering edit mode', async () => {
     // Arrange: Add a task
     const taskInput = document.getElementById(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
-    const addForm = document.getElementById("add-task-form") as HTMLFormElement;
+    const addForm = document.getElementById('add-task-form') as HTMLFormElement;
 
-    taskInput.value = "Focus test task";
-    addForm.dispatchEvent(new Event("submit"));
+    taskInput.value = 'Focus test task';
+    addForm.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added to DOM
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise(resolve => setTimeout(resolve, 10));
 
     // Get the task text element
-    const taskTextElement = document.querySelector(".task-text") as HTMLElement;
+    const taskTextElement = document.querySelector('.task-text') as HTMLElement;
 
     // Act: Double-click to enter edit mode
-    const dblClickEvent = new MouseEvent("dblclick", {
+    const dblClickEvent = new MouseEvent('dblclick', {
       bubbles: true,
       cancelable: true,
     });
     taskTextElement.dispatchEvent(dblClickEvent);
 
     // Assert: Edit input should be focused
-    const taskItem = taskTextElement.closest(".task-item") as HTMLElement;
+    const taskItem = taskTextElement.closest('.task-item') as HTMLElement;
     const editInput = taskItem.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
 
     expect(editInput).toBeTruthy();

@@ -1,7 +1,7 @@
-import "@testing-library/jest-dom";
+import '@testing-library/jest-dom';
 
 // Add CSS styles for testing
-const style = document.createElement("style");
+const style = document.createElement('style');
 style.textContent = `
   .task-item.completed .task-text {
     text-decoration: line-through;

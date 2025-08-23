@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { UIController } from "../controllers/UIController";
-import { TaskService } from "../services/TaskService";
-import { LocalStorageTaskRepository } from "../repositories/LocalStorageTaskRepository";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { UIController } from '../controllers/UIController';
+import { TaskService } from '../services/TaskService';
+import { LocalStorageTaskRepository } from '../repositories/LocalStorageTaskRepository';
 
-describe("Task Edit Persistence Integration Test", () => {
+describe('Task Edit Persistence Integration Test', () => {
   let uiController: UIController;
   let taskService: TaskService;
   let repository: LocalStorageTaskRepository;
@@ -31,9 +31,9 @@ describe("Task Edit Persistence Integration Test", () => {
     taskId: string,
     taskText: string
   ): HTMLLIElement => {
-    const taskElement = document.createElement("li");
-    taskElement.className = "task-item";
-    taskElement.setAttribute("data-task-id", taskId);
+    const taskElement = document.createElement('li');
+    taskElement.className = 'task-item';
+    taskElement.setAttribute('data-task-id', taskId);
     taskElement.innerHTML = `
       <div class="task-content">
         <input type="checkbox" class="task-checkbox" />
@@ -47,37 +47,37 @@ describe("Task Edit Persistence Integration Test", () => {
   };
 
   const waitForAsyncOperations = () =>
-    new Promise((resolve) => setTimeout(resolve, 0));
+    new Promise(resolve => setTimeout(resolve, 0));
 
   const simulateTaskEdit = async (
     taskElement: HTMLElement,
     newText: string,
-    saveMethod: "enter" | "blur"
+    saveMethod: 'enter' | 'blur'
   ) => {
     const taskTextSpan = taskElement.querySelector(
-      ".task-text"
+      '.task-text'
     ) as HTMLSpanElement;
 
     // Simulate double-click to enter edit mode
-    const dblClickEvent = new MouseEvent("dblclick", { bubbles: true });
+    const dblClickEvent = new MouseEvent('dblclick', { bubbles: true });
     taskTextSpan.dispatchEvent(dblClickEvent);
 
     // Get edit input and change text
     const editInput = taskElement.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
     expect(editInput).toBeTruthy();
     editInput.value = newText;
 
     // Save using specified method
-    if (saveMethod === "enter") {
-      const enterEvent = new KeyboardEvent("keydown", {
-        key: "Enter",
+    if (saveMethod === 'enter') {
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
         bubbles: true,
       });
       editInput.dispatchEvent(enterEvent);
     } else {
-      const blurEvent = new FocusEvent("blur", { bubbles: true });
+      const blurEvent = new FocusEvent('blur', { bubbles: true });
       editInput.dispatchEvent(blurEvent);
     }
 
@@ -90,7 +90,7 @@ describe("Task Edit Persistence Integration Test", () => {
   ) => {
     // Verify in LocalStorage
     const storedTasks = JSON.parse(
-      localStorage.getItem("todoApp_tasks") || "[]"
+      localStorage.getItem('todoApp_tasks') || '[]'
     );
     expect(storedTasks).toHaveLength(1);
     expect(storedTasks[0].text).toBe(expectedText);
@@ -111,47 +111,47 @@ describe("Task Edit Persistence Integration Test", () => {
     uiController = new UIController();
   });
 
-  it("should persist edited task content to LocalStorage when saving with Enter key", async () => {
+  it('should persist edited task content to LocalStorage when saving with Enter key', async () => {
     // Add a task first
-    await taskService.addTask("Original task text");
+    await taskService.addTask('Original task text');
     const tasks = await taskService.getTasks();
     const taskId = tasks[0].id;
 
     // Render the task manually
     const taskElement = createTaskElement(taskId, tasks[0].text);
-    document.getElementById("task-list")!.appendChild(taskElement);
+    document.getElementById('task-list')!.appendChild(taskElement);
 
     // Simulate edit and save with Enter
-    await simulateTaskEdit(taskElement, "Updated task text", "enter");
+    await simulateTaskEdit(taskElement, 'Updated task text', 'enter');
 
     // Verify edit mode is exited
-    const updatedEditInput = taskElement.querySelector(".task-edit-input");
+    const updatedEditInput = taskElement.querySelector('.task-edit-input');
     expect(updatedEditInput).toBeFalsy();
 
     // Verify UI is updated
     const updatedTaskTextSpan = taskElement.querySelector(
-      ".task-text"
+      '.task-text'
     ) as HTMLSpanElement;
-    expect(updatedTaskTextSpan.textContent).toBe("Updated task text");
+    expect(updatedTaskTextSpan.textContent).toBe('Updated task text');
 
     // Verify persistence
-    await verifyTaskPersistence(taskId, "Updated task text");
+    await verifyTaskPersistence(taskId, 'Updated task text');
   });
 
-  it("should persist edited task content to LocalStorage when saving with blur event", async () => {
+  it('should persist edited task content to LocalStorage when saving with blur event', async () => {
     // Add a task first
-    await taskService.addTask("Original blur task");
+    await taskService.addTask('Original blur task');
     const tasks = await taskService.getTasks();
     const taskId = tasks[0].id;
 
     // Render the task manually
     const taskElement = createTaskElement(taskId, tasks[0].text);
-    document.getElementById("task-list")!.appendChild(taskElement);
+    document.getElementById('task-list')!.appendChild(taskElement);
 
     // Simulate edit and save with blur
-    await simulateTaskEdit(taskElement, "Updated via blur", "blur");
+    await simulateTaskEdit(taskElement, 'Updated via blur', 'blur');
 
     // Verify persistence
-    await verifyTaskPersistence(taskId, "Updated via blur");
+    await verifyTaskPersistence(taskId, 'Updated via blur');
   });
 });

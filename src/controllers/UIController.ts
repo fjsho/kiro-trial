@@ -1,6 +1,6 @@
-import type { Task } from "../models/Task.js";
-import { TaskService, type FilterType } from "../services/TaskService.js";
-import { LocalStorageTaskRepository } from "../repositories/LocalStorageTaskRepository.js";
+import type { Task } from '../models/Task.js';
+import { TaskService, type FilterType } from '../services/TaskService.js';
+import { LocalStorageTaskRepository } from '../repositories/LocalStorageTaskRepository.js';
 
 // Constants for validation
 const VALIDATION_RULES = {
@@ -14,26 +14,26 @@ const ERROR_DISPLAY_DURATION = 5000; // 5 seconds
 // Error message constants
 const ERROR_MESSAGES = {
   QUOTA_EXCEEDED:
-    "ストレージの容量が不足しています。不要なデータを削除してください。",
+    'ストレージの容量が不足しています。不要なデータを削除してください。',
   SAVE_FAILED:
-    "保存に失敗しました。しばらく時間をおいてから再度お試しください。",
+    '保存に失敗しました。しばらく時間をおいてから再度お試しください。',
   LOAD_FAILED:
-    "データの読み込みに失敗しました。ページを再読み込みしてください。",
-  UPDATE_FAILED: "タスクの更新に失敗しました。再度お試しください。",
-  DELETE_FAILED: "タスクの削除に失敗しました。再度お試しください。",
+    'データの読み込みに失敗しました。ページを再読み込みしてください。',
+  UPDATE_FAILED: 'タスクの更新に失敗しました。再度お試しください。',
+  DELETE_FAILED: 'タスクの削除に失敗しました。再度お試しください。',
   GENERIC_ERROR:
-    "操作に失敗しました。しばらく時間をおいてから再度お試しください。",
+    '操作に失敗しました。しばらく時間をおいてから再度お試しください。',
 } as const;
 
 // Error element ID constant
-const ERROR_ELEMENT_ID = "error-message";
+const ERROR_ELEMENT_ID = 'error-message';
 
 export class UIController {
   private taskList!: HTMLElement;
   private taskForm!: HTMLFormElement;
   private taskInput!: HTMLInputElement;
   private taskService: TaskService;
-  private currentFilter: FilterType = "all";
+  private currentFilter: FilterType = 'all';
   private editingTaskId: string | null = null;
   private errorTimeoutId: number | null = null;
 
@@ -52,10 +52,10 @@ export class UIController {
   }
 
   private initializeElements(): void {
-    this.taskList = this.getRequiredElement("task-list");
-    this.taskForm = this.getRequiredElement("add-task-form") as HTMLFormElement;
+    this.taskList = this.getRequiredElement('task-list');
+    this.taskForm = this.getRequiredElement('add-task-form') as HTMLFormElement;
     this.taskInput = this.getRequiredElement(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
   }
 
@@ -68,11 +68,11 @@ export class UIController {
   }
 
   private bindEvents(): void {
-    this.taskForm.addEventListener("submit", this.handleAddTask.bind(this));
-    this.taskInput.addEventListener("keydown", this.handleKeyDown.bind(this));
-    this.taskList.addEventListener("change", this.handleTaskToggle.bind(this));
-    this.taskList.addEventListener("click", this.handleTaskDelete.bind(this));
-    this.taskList.addEventListener("dblclick", this.handleTaskEdit.bind(this));
+    this.taskForm.addEventListener('submit', this.handleAddTask.bind(this));
+    this.taskInput.addEventListener('keydown', this.handleKeyDown.bind(this));
+    this.taskList.addEventListener('change', this.handleTaskToggle.bind(this));
+    this.taskList.addEventListener('click', this.handleTaskDelete.bind(this));
+    this.taskList.addEventListener('dblclick', this.handleTaskEdit.bind(this));
 
     // Bind filter button events
     this.bindFilterEvents();
@@ -84,7 +84,7 @@ export class UIController {
   }
 
   private handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === "Enter" && !event.isComposing) {
+    if (event.key === 'Enter' && !event.isComposing) {
       event.preventDefault();
       this.processTaskAddition();
     }
@@ -109,7 +109,7 @@ export class UIController {
       this.updateTaskItemCompletionState(taskItem, checkbox.checked);
       await this.refreshUI();
     } catch (error) {
-      this.handleTaskError("Failed to toggle task", error);
+      this.handleTaskError('Failed to toggle task', error);
       this.revertCheckboxState(checkbox);
     }
   }
@@ -124,7 +124,7 @@ export class UIController {
     const taskId = this.getTaskIdFromDeleteButton(deleteButton);
 
     if (!taskId) {
-      console.warn("Delete button clicked but no task ID found");
+      console.warn('Delete button clicked but no task ID found');
       return;
     }
 
@@ -132,7 +132,7 @@ export class UIController {
       await this.taskService.deleteTask(taskId);
       await this.refreshTaskList();
     } catch (error) {
-      this.handleTaskError("Failed to delete task", error);
+      this.handleTaskError('Failed to delete task', error);
     }
   }
 
@@ -170,11 +170,11 @@ export class UIController {
   }
 
   private isTaskTextElement(element: HTMLElement): boolean {
-    return element.classList.contains("task-text");
+    return element.classList.contains('task-text');
   }
 
   private getTaskItemFromElement(element: HTMLElement): HTMLElement | null {
-    return element.closest(".task-item") as HTMLElement;
+    return element.closest('.task-item') as HTMLElement;
   }
 
   /**
@@ -194,13 +194,13 @@ export class UIController {
     this.editingTaskId = taskId;
 
     // Get current task text
-    const currentText = taskTextElement.textContent || "";
+    const currentText = taskTextElement.textContent || '';
 
     // Create edit input with proper attributes
     const editInput = this.createEditInput(currentText, taskId);
 
     // Hide the original task text
-    taskTextElement.style.display = "none";
+    taskTextElement.style.display = 'none';
 
     // Insert the edit input after the task text
     taskTextElement.parentNode?.insertBefore(
@@ -217,18 +217,18 @@ export class UIController {
     currentText: string,
     taskId: string
   ): HTMLInputElement {
-    const editInput = document.createElement("input");
-    editInput.type = "text";
-    editInput.className = "task-edit-input";
+    const editInput = document.createElement('input');
+    editInput.type = 'text';
+    editInput.className = 'task-edit-input';
     editInput.value = currentText;
-    editInput.setAttribute("data-task-id", taskId);
-    editInput.setAttribute("aria-label", "タスクを編集");
+    editInput.setAttribute('data-task-id', taskId);
+    editInput.setAttribute('aria-label', 'タスクを編集');
 
     // Add event listeners for Enter and Escape keys
-    editInput.addEventListener("keydown", this.handleEditKeyDown.bind(this));
+    editInput.addEventListener('keydown', this.handleEditKeyDown.bind(this));
 
     // Add blur event listener to save on focus loss
-    editInput.addEventListener("blur", this.handleEditBlur.bind(this));
+    editInput.addEventListener('blur', this.handleEditBlur.bind(this));
 
     return editInput;
   }
@@ -237,10 +237,10 @@ export class UIController {
    * Handles keydown events in edit mode (Enter to save, Escape to cancel)
    */
   private async handleEditKeyDown(event: KeyboardEvent): Promise<void> {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       event.preventDefault();
       await this.saveEditedTask(event.target as HTMLInputElement);
-    } else if (event.key === "Escape") {
+    } else if (event.key === 'Escape') {
       event.preventDefault();
       this.cancelEdit();
     }
@@ -258,10 +258,10 @@ export class UIController {
    */
   private async saveEditedTask(editInput: HTMLInputElement): Promise<void> {
     const newText = editInput.value.trim();
-    const taskId = editInput.getAttribute("data-task-id");
+    const taskId = editInput.getAttribute('data-task-id');
 
     if (!taskId) {
-      console.warn("No task ID found for edit input");
+      console.warn('No task ID found for edit input');
       this.exitEditMode();
       return;
     }
@@ -281,7 +281,7 @@ export class UIController {
         `[data-task-id="${taskId}"]`
       ) as HTMLElement;
       if (taskItem) {
-        const taskText = taskItem.querySelector(".task-text") as HTMLElement;
+        const taskText = taskItem.querySelector('.task-text') as HTMLElement;
         if (taskText) {
           taskText.textContent = newText;
         }
@@ -290,7 +290,7 @@ export class UIController {
       // Exit edit mode
       this.exitEditMode();
     } catch (error) {
-      this.handleTaskError("Failed to update task", error);
+      this.handleTaskError('Failed to update task', error);
       this.exitEditMode();
     }
   }
@@ -320,15 +320,15 @@ export class UIController {
     }
 
     // Remove edit input
-    const editInput = taskItem.querySelector(".task-edit-input");
+    const editInput = taskItem.querySelector('.task-edit-input');
     if (editInput) {
       editInput.remove();
     }
 
     // Show original task text
-    const taskText = taskItem.querySelector(".task-text") as HTMLElement;
+    const taskText = taskItem.querySelector('.task-text') as HTMLElement;
     if (taskText) {
-      taskText.style.display = "";
+      taskText.style.display = '';
     }
 
     // Clear editing state
@@ -336,29 +336,29 @@ export class UIController {
   }
 
   private isTaskCheckbox(element: HTMLInputElement): boolean {
-    return element.classList.contains("task-checkbox");
+    return element.classList.contains('task-checkbox');
   }
 
   private isDeleteButton(element: HTMLButtonElement): boolean {
-    return element.classList.contains("delete-btn");
+    return element.classList.contains('delete-btn');
   }
 
   private getTaskIdFromDeleteButton(
     deleteButton: HTMLButtonElement
   ): string | null {
-    return deleteButton.getAttribute("data-task-id");
+    return deleteButton.getAttribute('data-task-id');
   }
 
   private getTaskItemFromCheckbox(checkbox: HTMLInputElement): HTMLElement {
-    const taskItem = checkbox.closest(".task-item") as HTMLElement;
+    const taskItem = checkbox.closest('.task-item') as HTMLElement;
     if (!taskItem) {
-      throw new Error("Task item not found for checkbox");
+      throw new Error('Task item not found for checkbox');
     }
     return taskItem;
   }
 
   private getTaskIdFromElement(element: HTMLElement): string | null {
-    return element.getAttribute("data-task-id");
+    return element.getAttribute('data-task-id');
   }
 
   /**
@@ -373,9 +373,9 @@ export class UIController {
     completed: boolean
   ): void {
     if (completed) {
-      taskItem.classList.add("completed");
+      taskItem.classList.add('completed');
     } else {
-      taskItem.classList.remove("completed");
+      taskItem.classList.remove('completed');
     }
   }
 
@@ -399,7 +399,7 @@ export class UIController {
       // Update UI state after adding task
       await this.refreshUI();
     } catch (error) {
-      this.handleTaskError("Failed to add task", error);
+      this.handleTaskError('Failed to add task', error);
     }
   }
 
@@ -418,7 +418,7 @@ export class UIController {
   }
 
   private clearInput(): void {
-    this.taskInput.value = "";
+    this.taskInput.value = '';
   }
 
   private addTaskToDOM(task: Task): void {
@@ -431,15 +431,15 @@ export class UIController {
       const tasks = await this.taskService.getTasks();
       this.renderTaskList(tasks);
     } catch (error) {
-      this.handleTaskError("Failed to load initial tasks", error);
+      this.handleTaskError('Failed to load initial tasks', error);
     }
   }
 
   private renderTaskList(tasks: Task[]): void {
     // Clear existing tasks first
-    this.taskList.innerHTML = "";
+    this.taskList.innerHTML = '';
     // Add all tasks to DOM
-    tasks.forEach((task) => this.addTaskToDOM(task));
+    tasks.forEach(task => this.addTaskToDOM(task));
 
     // Update UI state
     this.updateEmptyState(tasks.length === 0);
@@ -452,9 +452,9 @@ export class UIController {
    */
   private renderFilteredTaskList(tasks: Task[]): void {
     // Clear existing tasks first
-    this.taskList.innerHTML = "";
+    this.taskList.innerHTML = '';
     // Add filtered tasks to DOM
-    tasks.forEach((task) => this.addTaskToDOM(task));
+    tasks.forEach(task => this.addTaskToDOM(task));
 
     // Update empty state based on filtered tasks
     this.updateEmptyState(tasks.length === 0);
@@ -466,20 +466,20 @@ export class UIController {
   private updateEmptyState(isEmpty: boolean): void {
     // Cache the empty state element to avoid repeated DOM queries
     if (!this.emptyStateElement) {
-      this.emptyStateElement = document.getElementById("empty-state");
+      this.emptyStateElement = document.getElementById('empty-state');
     }
     if (this.emptyStateElement) {
-      this.emptyStateElement.style.display = isEmpty ? "block" : "none";
+      this.emptyStateElement.style.display = isEmpty ? 'block' : 'none';
     }
   }
 
   private updateStats(tasks: Task[]): void {
     const total = tasks.length;
-    const completed = tasks.filter((task) => task.completed).length;
+    const completed = tasks.filter(task => task.completed).length;
 
     // Cache the stats element to avoid repeated DOM queries
     if (!this.statsTextElement) {
-      this.statsTextElement = document.getElementById("stats-text");
+      this.statsTextElement = document.getElementById('stats-text');
     }
 
     if (this.statsTextElement) {
@@ -495,7 +495,7 @@ export class UIController {
       const allTasks = await this.taskService.getTasks();
       this.updateStats(allTasks);
     } catch (error) {
-      this.handleTaskError("Failed to update stats", error);
+      this.handleTaskError('Failed to update stats', error);
     }
   }
 
@@ -505,17 +505,17 @@ export class UIController {
       await this.updateStatsWithAllTasks();
 
       // Update empty state based on current displayed tasks
-      const displayedTasks = document.querySelectorAll("#task-list .task-item");
+      const displayedTasks = document.querySelectorAll('#task-list .task-item');
       this.updateEmptyState(displayedTasks.length === 0);
     } catch (error) {
-      this.handleTaskError("Failed to refresh UI", error);
+      this.handleTaskError('Failed to refresh UI', error);
     }
   }
 
   private async refreshTaskList(): Promise<void> {
     try {
       // If we're currently filtering, maintain the filter
-      if (this.currentFilter !== "all") {
+      if (this.currentFilter !== 'all') {
         await this.handleFilterChange(this.currentFilter);
       } else {
         // Otherwise, show all tasks
@@ -523,7 +523,7 @@ export class UIController {
         this.renderTaskList(tasks);
       }
     } catch (error) {
-      this.handleTaskError("Failed to refresh task list", error);
+      this.handleTaskError('Failed to refresh task list', error);
     }
   }
 
@@ -544,7 +544,7 @@ export class UIController {
   private showErrorMessage(message: string, error: unknown): void {
     const errorElement = document.getElementById(ERROR_ELEMENT_ID);
     if (!errorElement) {
-      console.warn("Error message element not found");
+      console.warn('Error message element not found');
       return;
     }
 
@@ -553,7 +553,7 @@ export class UIController {
 
     // エラーメッセージを表示
     errorElement.textContent = displayMessage;
-    errorElement.style.display = "block";
+    errorElement.style.display = 'block';
 
     // 既存のタイマーをクリア（複数のエラーが連続で発生した場合）
     if (this.errorTimeoutId) {
@@ -562,7 +562,7 @@ export class UIController {
 
     // 指定時間後に自動的に非表示にする
     this.errorTimeoutId = setTimeout(() => {
-      errorElement.style.display = "none";
+      errorElement.style.display = 'none';
       this.errorTimeoutId = null;
     }, ERROR_DISPLAY_DURATION);
   }
@@ -582,33 +582,33 @@ export class UIController {
 
     // QuotaExceededError を最初にチェック（より具体的なエラー）
     if (
-      errorMessage.includes("QuotaExceededError") ||
-      (error instanceof Error && error.name === "QuotaExceededError")
+      errorMessage.includes('QuotaExceededError') ||
+      (error instanceof Error && error.name === 'QuotaExceededError')
     ) {
       return ERROR_MESSAGES.QUOTA_EXCEEDED;
     }
 
     // 読み込みエラーをチェック
     if (
-      errorMessage.includes("Failed to load tasks from localStorage") ||
-      message.includes("Failed to load initial tasks")
+      errorMessage.includes('Failed to load tasks from localStorage') ||
+      message.includes('Failed to load initial tasks')
     ) {
       return ERROR_MESSAGES.LOAD_FAILED;
     }
 
     // 保存エラーをチェック（QuotaExceededError以外の保存エラー）
     if (
-      errorMessage.includes("Failed to save tasks to localStorage") ||
-      errorMessage.includes("Failed to add task")
+      errorMessage.includes('Failed to save tasks to localStorage') ||
+      errorMessage.includes('Failed to add task')
     ) {
       return ERROR_MESSAGES.SAVE_FAILED;
     }
 
-    if (errorMessage.includes("Failed to update task")) {
+    if (errorMessage.includes('Failed to update task')) {
       return ERROR_MESSAGES.UPDATE_FAILED;
     }
 
-    if (errorMessage.includes("Failed to delete task")) {
+    if (errorMessage.includes('Failed to delete task')) {
       return ERROR_MESSAGES.DELETE_FAILED;
     }
 
@@ -621,17 +621,17 @@ export class UIController {
    */
   private bindFilterEvents(): void {
     const filterButtons =
-      document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+      document.querySelectorAll<HTMLButtonElement>('.filter-btn');
 
     if (filterButtons.length === 0) {
       console.warn(
-        "No filter buttons found. Filter functionality will not be available."
+        'No filter buttons found. Filter functionality will not be available.'
       );
       return;
     }
 
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", this.handleFilterButtonClick.bind(this));
+    filterButtons.forEach(button => {
+      button.addEventListener('click', this.handleFilterButtonClick.bind(this));
     });
   }
 
@@ -642,14 +642,14 @@ export class UIController {
   private async handleFilterButtonClick(event: Event): Promise<void> {
     const button = event.target as HTMLButtonElement;
 
-    if (!button || !button.hasAttribute("data-filter")) {
+    if (!button || !button.hasAttribute('data-filter')) {
       console.warn(
-        "Invalid filter button clicked - missing data-filter attribute"
+        'Invalid filter button clicked - missing data-filter attribute'
       );
       return;
     }
 
-    const filter = button.getAttribute("data-filter") as FilterType;
+    const filter = button.getAttribute('data-filter') as FilterType;
 
     if (!filter || !this.isValidFilter(filter)) {
       console.warn(`Invalid filter button clicked: ${filter}`);
@@ -659,7 +659,7 @@ export class UIController {
     try {
       await this.handleFilterChange(filter);
     } catch (error) {
-      this.handleTaskError("Failed to handle filter change", error);
+      this.handleTaskError('Failed to handle filter change', error);
     }
   }
 
@@ -686,7 +686,7 @@ export class UIController {
       // Update filter button states
       this.updateFilterButtonStates(filter);
     } catch (error) {
-      this.handleTaskError("Failed to apply filter", error);
+      this.handleTaskError('Failed to apply filter', error);
     }
   }
 
@@ -696,7 +696,7 @@ export class UIController {
    * @returns true if valid, false otherwise
    */
   private isValidFilter(filter: string): filter is FilterType {
-    return ["all", "active", "completed"].includes(filter);
+    return ['all', 'active', 'completed'].includes(filter);
   }
 
   /**
@@ -708,27 +708,27 @@ export class UIController {
   private updateFilterButtonStates(activeFilter: FilterType): void {
     // Get current filter buttons (don't cache here as buttons might be added dynamically in tests)
     const filterButtons =
-      document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+      document.querySelectorAll<HTMLButtonElement>('.filter-btn');
 
-    filterButtons.forEach((button) => {
+    filterButtons.forEach(button => {
       const buttonFilter = button.getAttribute(
-        "data-filter"
+        'data-filter'
       ) as FilterType | null;
       const isActive = buttonFilter === activeFilter;
 
       // Update visual state
-      button.classList.toggle("active", isActive);
+      button.classList.toggle('active', isActive);
 
       // Update accessibility state - always set aria-pressed, even for buttons without data-filter
-      button.setAttribute("aria-pressed", isActive.toString());
+      button.setAttribute('aria-pressed', isActive.toString());
     });
   }
 
   private createTaskElement(task: Task): HTMLLIElement {
-    const taskItem = document.createElement("li");
-    taskItem.className = task.completed ? "task-item completed" : "task-item";
-    taskItem.setAttribute("data-task-id", task.id);
-    taskItem.setAttribute("role", "listitem");
+    const taskItem = document.createElement('li');
+    taskItem.className = task.completed ? 'task-item completed' : 'task-item';
+    taskItem.setAttribute('data-task-id', task.id);
+    taskItem.setAttribute('role', 'listitem');
 
     taskItem.innerHTML = this.getTaskHTML(task);
     return taskItem;
@@ -745,7 +745,7 @@ export class UIController {
           id="task-checkbox-${task.id}" 
           class="task-checkbox"
           aria-describedby="task-text-${task.id}"
-          ${task.completed ? "checked" : ""}
+          ${task.completed ? 'checked' : ''}
         />
         <label for="task-checkbox-${task.id}" class="task-label">
           <span id="task-text-${
@@ -765,7 +765,7 @@ export class UIController {
   }
 
   private escapeHtml(text: string): string {
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }

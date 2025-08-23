@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Mock localStorage
 const localStorageMock = {
@@ -8,9 +8,9 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-vi.stubGlobal("localStorage", localStorageMock);
+vi.stubGlobal('localStorage', localStorageMock);
 
-describe("Task Strikethrough Integration Tests", () => {
+describe('Task Strikethrough Integration Tests', () => {
   let container: HTMLElement;
   let uiController: UIController;
 
@@ -57,11 +57,11 @@ describe("Task Strikethrough Integration Tests", () => {
       </div>
     `;
 
-    container = document.getElementById("app")!;
+    container = document.getElementById('app')!;
     uiController = new UIController();
   });
 
-  describe("Completed task strikethrough display", () => {
+  describe('Completed task strikethrough display', () => {
     // Helper function to simulate task completion state change
     const setTaskCompletionState = (
       taskItem: HTMLElement,
@@ -70,102 +70,102 @@ describe("Task Strikethrough Integration Tests", () => {
     ) => {
       checkbox.checked = completed;
       if (completed) {
-        taskItem.classList.add("completed");
+        taskItem.classList.add('completed');
       } else {
-        taskItem.classList.remove("completed");
+        taskItem.classList.remove('completed');
       }
     };
 
-    it("should apply strikethrough styling when task is completed", async () => {
+    it('should apply strikethrough styling when task is completed', async () => {
       // Add a task first
       const taskInput = document.getElementById(
-        "new-task-input"
+        'new-task-input'
       ) as HTMLInputElement;
       const addButton = document.getElementById(
-        "add-task-btn"
+        'add-task-btn'
       ) as HTMLButtonElement;
 
-      taskInput.value = "Test task for strikethrough";
+      taskInput.value = 'Test task for strikethrough';
       addButton.click();
 
       // Wait for task to be added
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       // Find the task item
-      const taskList = document.getElementById("task-list")!;
-      const taskItem = taskList.querySelector(".task-item") as HTMLElement;
+      const taskList = document.getElementById('task-list')!;
+      const taskItem = taskList.querySelector('.task-item') as HTMLElement;
       expect(taskItem).toBeTruthy();
 
       // Find the checkbox and task text
       const checkbox = taskItem.querySelector(
-        ".task-checkbox"
+        '.task-checkbox'
       ) as HTMLInputElement;
-      const taskText = taskItem.querySelector(".task-text") as HTMLElement;
+      const taskText = taskItem.querySelector('.task-text') as HTMLElement;
 
       expect(checkbox).toBeTruthy();
       expect(taskText).toBeTruthy();
 
       // Initially, task should not be completed
-      expect(taskItem.classList.contains("completed")).toBe(false);
+      expect(taskItem.classList.contains('completed')).toBe(false);
       expect(checkbox.checked).toBe(false);
 
       // Check the computed style for strikethrough (should not have it initially)
       const initialStyle = window.getComputedStyle(taskText);
-      expect(initialStyle.textDecoration).not.toContain("line-through");
+      expect(initialStyle.textDecoration).not.toContain('line-through');
 
       // Simulate task completion
       setTaskCompletionState(taskItem, checkbox, true);
 
       // Verify the task item has the completed class
-      expect(taskItem.classList.contains("completed")).toBe(true);
+      expect(taskItem.classList.contains('completed')).toBe(true);
       expect(checkbox.checked).toBe(true);
 
       // Verify the strikethrough styling is applied
       const completedStyle = window.getComputedStyle(taskText);
-      expect(completedStyle.textDecoration).toContain("line-through");
+      expect(completedStyle.textDecoration).toContain('line-through');
     });
 
-    it("should remove strikethrough styling when task is uncompleted", async () => {
+    it('should remove strikethrough styling when task is uncompleted', async () => {
       // Add a task first
       const taskInput = document.getElementById(
-        "new-task-input"
+        'new-task-input'
       ) as HTMLInputElement;
       const addButton = document.getElementById(
-        "add-task-btn"
+        'add-task-btn'
       ) as HTMLButtonElement;
 
-      taskInput.value = "Test task for strikethrough removal";
+      taskInput.value = 'Test task for strikethrough removal';
       addButton.click();
 
       // Wait for task to be added
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       // Find the task item and elements
-      const taskList = document.getElementById("task-list")!;
-      const taskItem = taskList.querySelector(".task-item") as HTMLElement;
+      const taskList = document.getElementById('task-list')!;
+      const taskItem = taskList.querySelector('.task-item') as HTMLElement;
       const checkbox = taskItem.querySelector(
-        ".task-checkbox"
+        '.task-checkbox'
       ) as HTMLInputElement;
-      const taskText = taskItem.querySelector(".task-text") as HTMLElement;
+      const taskText = taskItem.querySelector('.task-text') as HTMLElement;
 
       // Complete the task first
       setTaskCompletionState(taskItem, checkbox, true);
 
       // Verify it's completed with strikethrough
-      expect(taskItem.classList.contains("completed")).toBe(true);
+      expect(taskItem.classList.contains('completed')).toBe(true);
       const completedStyle = window.getComputedStyle(taskText);
-      expect(completedStyle.textDecoration).toContain("line-through");
+      expect(completedStyle.textDecoration).toContain('line-through');
 
       // Uncomplete the task
       setTaskCompletionState(taskItem, checkbox, false);
 
       // Verify the completed class is removed
-      expect(taskItem.classList.contains("completed")).toBe(false);
+      expect(taskItem.classList.contains('completed')).toBe(false);
       expect(checkbox.checked).toBe(false);
 
       // Verify the strikethrough styling is removed
       const uncompletedStyle = window.getComputedStyle(taskText);
-      expect(uncompletedStyle.textDecoration).not.toContain("line-through");
+      expect(uncompletedStyle.textDecoration).not.toContain('line-through');
     });
   });
 });

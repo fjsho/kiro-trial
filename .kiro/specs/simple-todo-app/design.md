@@ -113,7 +113,7 @@ class ApiTaskRepository implements TaskRepository {
 ### 3. Task Service (`TaskService`)
 
 ```typescript
-type FilterType = "all" | "active" | "completed";
+type FilterType = 'all' | 'active' | 'completed';
 
 class TaskService {
   constructor(private repository: TaskRepository) {}
@@ -204,12 +204,12 @@ interface Task {
 ### Filter Types
 
 ```typescript
-type FilterType = "all" | "active" | "completed";
+type FilterType = 'all' | 'active' | 'completed';
 
 const FILTERS: Record<string, FilterType> = {
-  ALL: "all",
-  ACTIVE: "active",
-  COMPLETED: "completed",
+  ALL: 'all',
+  ACTIVE: 'active',
+  COMPLETED: 'completed',
 };
 ```
 

@@ -1,6 +1,6 @@
-import type { Task } from "../models/Task.js";
-import { TaskModel } from "../models/Task.js";
-import type { TaskRepository } from "./TaskRepository.js";
+import type { Task } from '../models/Task.js';
+import { TaskModel } from '../models/Task.js';
+import type { TaskRepository } from './TaskRepository.js';
 
 interface StoredTask {
   id: string;
@@ -10,18 +10,18 @@ interface StoredTask {
 }
 
 export class LocalStorageTaskRepository implements TaskRepository {
-  private readonly STORAGE_KEY = "todoApp_tasks";
+  private readonly STORAGE_KEY = 'todoApp_tasks';
 
   private static readonly ERROR_MESSAGES = {
-    ADD_FAILED: "Failed to add task",
-    UPDATE_FAILED: "Failed to update task",
-    DELETE_FAILED: "Failed to delete task",
-    TASK_NOT_FOUND: "Task not found",
-    STORAGE_FAILED: "Failed to save tasks to localStorage",
-    LOAD_FAILED: "Failed to load tasks from localStorage",
-    INVALID_DATA_FORMAT: "Invalid data format in localStorage: expected array",
-    INVALID_TASK_STRUCTURE: "Invalid stored task structure",
-    INVALID_DATE: "Invalid createdAt date",
+    ADD_FAILED: 'Failed to add task',
+    UPDATE_FAILED: 'Failed to update task',
+    DELETE_FAILED: 'Failed to delete task',
+    TASK_NOT_FOUND: 'Task not found',
+    STORAGE_FAILED: 'Failed to save tasks to localStorage',
+    LOAD_FAILED: 'Failed to load tasks from localStorage',
+    INVALID_DATA_FORMAT: 'Invalid data format in localStorage: expected array',
+    INVALID_TASK_STRUCTURE: 'Invalid stored task structure',
+    INVALID_DATE: 'Invalid createdAt date',
   } as const;
 
   async addTask(task: Task): Promise<Task> {
@@ -42,7 +42,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
   async updateTask(id: string, updates: Partial<Task>): Promise<Task> {
     try {
       const tasks = await this.getTasks();
-      const taskIndex = tasks.findIndex((task) => task.id === id);
+      const taskIndex = tasks.findIndex(task => task.id === id);
 
       if (taskIndex === -1) {
         throw new Error(`Task with id ${id} not found`);
@@ -55,7 +55,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
     } catch (error) {
       throw new Error(
         `Failed to update task: ${
-          error instanceof Error ? error.message : "Unknown error"
+          error instanceof Error ? error.message : 'Unknown error'
         }`
       );
     }
@@ -64,7 +64,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
   async deleteTask(id: string): Promise<void> {
     try {
       const tasks = await this.getTasks();
-      const filteredTasks = tasks.filter((task) => task.id !== id);
+      const filteredTasks = tasks.filter(task => task.id !== id);
 
       if (filteredTasks.length === tasks.length) {
         throw new Error(`Task with id ${id} not found`);
@@ -74,7 +74,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
     } catch (error) {
       throw new Error(
         `Failed to delete task: ${
-          error instanceof Error ? error.message : "Unknown error"
+          error instanceof Error ? error.message : 'Unknown error'
         }`
       );
     }
@@ -121,17 +121,17 @@ export class LocalStorageTaskRepository implements TaskRepository {
             validTasks.push(task);
           }
         } catch (error) {
-          console.warn("Skipping invalid task during deserialization:", error);
+          console.warn('Skipping invalid task during deserialization:', error);
           // Continue processing other tasks
         }
       }
 
       return validTasks;
     } catch (error) {
-      console.error("Failed to load tasks from localStorage:", error);
+      console.error('Failed to load tasks from localStorage:', error);
 
       // If it's a security error, throw the error to show user feedback
-      if (error instanceof Error && error.message.includes("SecurityError")) {
+      if (error instanceof Error && error.message.includes('SecurityError')) {
         throw new Error(
           `Failed to load tasks from localStorage: ${error.message}`
         );
@@ -149,7 +149,7 @@ export class LocalStorageTaskRepository implements TaskRepository {
     } catch (error) {
       throw new Error(
         `Failed to save tasks to localStorage: ${
-          error instanceof Error ? error.message : "Unknown error"
+          error instanceof Error ? error.message : 'Unknown error'
         }`
       );
     }
@@ -195,14 +195,14 @@ export class LocalStorageTaskRepository implements TaskRepository {
    */
   private isValidStoredTask(storedTask: any): storedTask is StoredTask {
     return (
-      typeof storedTask === "object" &&
+      typeof storedTask === 'object' &&
       storedTask !== null &&
-      typeof storedTask.id === "string" &&
+      typeof storedTask.id === 'string' &&
       storedTask.id.length > 0 &&
-      typeof storedTask.text === "string" &&
+      typeof storedTask.text === 'string' &&
       storedTask.text.length > 0 &&
-      typeof storedTask.completed === "boolean" &&
-      typeof storedTask.createdAt === "string" &&
+      typeof storedTask.completed === 'boolean' &&
+      typeof storedTask.createdAt === 'string' &&
       storedTask.createdAt.length > 0
     );
   }
@@ -215,17 +215,17 @@ export class LocalStorageTaskRepository implements TaskRepository {
    */
   private isValidTask(task: Task): boolean {
     return (
-      typeof task.id === "string" &&
+      typeof task.id === 'string' &&
       task.id.length > 0 &&
-      typeof task.text === "string" &&
+      typeof task.text === 'string' &&
       task.text.length > 0 &&
-      typeof task.completed === "boolean" &&
+      typeof task.completed === 'boolean' &&
       task.createdAt instanceof Date &&
       !isNaN(task.createdAt.getTime())
     );
   }
 
   private getErrorMessage(error: unknown): string {
-    return error instanceof Error ? error.message : "Unknown error";
+    return error instanceof Error ? error.message : 'Unknown error';
   }
 }

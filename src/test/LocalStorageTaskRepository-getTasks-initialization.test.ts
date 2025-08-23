@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { LocalStorageTaskRepository } from "../repositories/LocalStorageTaskRepository";
-import { TaskModel } from "../models/Task";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { LocalStorageTaskRepository } from '../repositories/LocalStorageTaskRepository';
+import { TaskModel } from '../models/Task';
 
-describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
+describe('LocalStorageTaskRepository - getTasks() Initialization', () => {
   let repository: LocalStorageTaskRepository;
 
   beforeEach(() => {
@@ -11,8 +11,8 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
     repository = new LocalStorageTaskRepository();
   });
 
-  describe("Initial Load Scenarios", () => {
-    it("should return empty array when localStorage is empty", async () => {
+  describe('Initial Load Scenarios', () => {
+    it('should return empty array when localStorage is empty', async () => {
       // Ensure localStorage is completely empty
       localStorage.clear();
 
@@ -22,9 +22,9 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       expect(tasks).toHaveLength(0);
     });
 
-    it("should return empty array when storage key does not exist", async () => {
+    it('should return empty array when storage key does not exist', async () => {
       // Set some other data in localStorage but not our key
-      localStorage.setItem("other_key", "some data");
+      localStorage.setItem('other_key', 'some data');
 
       const tasks = await repository.getTasks();
 
@@ -32,23 +32,23 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       expect(tasks).toHaveLength(0);
     });
 
-    it("should load and deserialize tasks correctly from localStorage", async () => {
+    it('should load and deserialize tasks correctly from localStorage', async () => {
       // Manually set valid task data in localStorage
       const storedTasks = [
         {
-          id: "task-1",
-          text: "Test Task 1",
+          id: 'task-1',
+          text: 'Test Task 1',
           completed: false,
-          createdAt: "2023-01-01T00:00:00.000Z",
+          createdAt: '2023-01-01T00:00:00.000Z',
         },
         {
-          id: "task-2",
-          text: "Test Task 2",
+          id: 'task-2',
+          text: 'Test Task 2',
           completed: true,
-          createdAt: "2023-01-02T00:00:00.000Z",
+          createdAt: '2023-01-02T00:00:00.000Z',
         },
       ];
-      localStorage.setItem("todoApp_tasks", JSON.stringify(storedTasks));
+      localStorage.setItem('todoApp_tasks', JSON.stringify(storedTasks));
 
       const tasks = await repository.getTasks();
 
@@ -56,56 +56,56 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
 
       // Verify first task
       expect(tasks[0]).toBeInstanceOf(TaskModel);
-      expect(tasks[0].id).toBe("task-1");
-      expect(tasks[0].text).toBe("Test Task 1");
+      expect(tasks[0].id).toBe('task-1');
+      expect(tasks[0].text).toBe('Test Task 1');
       expect(tasks[0].completed).toBe(false);
-      expect(tasks[0].createdAt).toEqual(new Date("2023-01-01T00:00:00.000Z"));
+      expect(tasks[0].createdAt).toEqual(new Date('2023-01-01T00:00:00.000Z'));
 
       // Verify second task
       expect(tasks[1]).toBeInstanceOf(TaskModel);
-      expect(tasks[1].id).toBe("task-2");
-      expect(tasks[1].text).toBe("Test Task 2");
+      expect(tasks[1].id).toBe('task-2');
+      expect(tasks[1].text).toBe('Test Task 2');
       expect(tasks[1].completed).toBe(true);
-      expect(tasks[1].createdAt).toEqual(new Date("2023-01-02T00:00:00.000Z"));
+      expect(tasks[1].createdAt).toEqual(new Date('2023-01-02T00:00:00.000Z'));
     });
 
-    it("should preserve task order from localStorage", async () => {
+    it('should preserve task order from localStorage', async () => {
       // Set tasks in specific order
       const storedTasks = [
         {
-          id: "task-3",
-          text: "Third Task",
+          id: 'task-3',
+          text: 'Third Task',
           completed: false,
-          createdAt: "2023-01-03T00:00:00.000Z",
+          createdAt: '2023-01-03T00:00:00.000Z',
         },
         {
-          id: "task-1",
-          text: "First Task",
+          id: 'task-1',
+          text: 'First Task',
           completed: true,
-          createdAt: "2023-01-01T00:00:00.000Z",
+          createdAt: '2023-01-01T00:00:00.000Z',
         },
         {
-          id: "task-2",
-          text: "Second Task",
+          id: 'task-2',
+          text: 'Second Task',
           completed: false,
-          createdAt: "2023-01-02T00:00:00.000Z",
+          createdAt: '2023-01-02T00:00:00.000Z',
         },
       ];
-      localStorage.setItem("todoApp_tasks", JSON.stringify(storedTasks));
+      localStorage.setItem('todoApp_tasks', JSON.stringify(storedTasks));
 
       const tasks = await repository.getTasks();
 
       expect(tasks).toHaveLength(3);
-      expect(tasks[0].text).toBe("Third Task");
-      expect(tasks[1].text).toBe("First Task");
-      expect(tasks[2].text).toBe("Second Task");
+      expect(tasks[0].text).toBe('Third Task');
+      expect(tasks[1].text).toBe('First Task');
+      expect(tasks[2].text).toBe('Second Task');
     });
   });
 
-  describe("Error Handling", () => {
-    it("should handle invalid JSON data gracefully", async () => {
+  describe('Error Handling', () => {
+    it('should handle invalid JSON data gracefully', async () => {
       // Set invalid JSON in localStorage
-      localStorage.setItem("todoApp_tasks", "invalid json data");
+      localStorage.setItem('todoApp_tasks', 'invalid json data');
 
       // Should not throw error and return empty array
       const tasks = await repository.getTasks();
@@ -114,14 +114,14 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       expect(tasks).toHaveLength(0);
     });
 
-    it("should handle malformed task objects gracefully", async () => {
+    it('should handle malformed task objects gracefully', async () => {
       // Set JSON that parses but has invalid task structure
       localStorage.setItem(
-        "todoApp_tasks",
+        'todoApp_tasks',
         JSON.stringify([
-          { id: "task-1" }, // missing required fields
-          { text: "Task without ID" }, // missing id
-          "not an object", // not even an object
+          { id: 'task-1' }, // missing required fields
+          { text: 'Task without ID' }, // missing id
+          'not an object', // not even an object
         ])
       );
 
@@ -132,11 +132,11 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       expect(tasks).toHaveLength(0);
     });
 
-    it("should handle localStorage access errors", async () => {
+    it('should handle localStorage access errors', async () => {
       // Mock localStorage.getItem to throw an error
       const originalGetItem = localStorage.getItem;
       localStorage.getItem = vi.fn().mockImplementation(() => {
-        throw new Error("localStorage access denied");
+        throw new Error('localStorage access denied');
       });
 
       try {
@@ -150,17 +150,17 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       }
     });
 
-    it("should handle Date parsing errors in createdAt field", async () => {
+    it('should handle Date parsing errors in createdAt field', async () => {
       // Set task with invalid date
       const storedTasks = [
         {
-          id: "task-1",
-          text: "Test Task",
+          id: 'task-1',
+          text: 'Test Task',
           completed: false,
-          createdAt: "invalid date string",
+          createdAt: 'invalid date string',
         },
       ];
-      localStorage.setItem("todoApp_tasks", JSON.stringify(storedTasks));
+      localStorage.setItem('todoApp_tasks', JSON.stringify(storedTasks));
 
       // Should handle gracefully
       const tasks = await repository.getTasks();
@@ -170,10 +170,10 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
     });
   });
 
-  describe("Data Type Validation", () => {
-    it("should handle null value in localStorage", async () => {
+  describe('Data Type Validation', () => {
+    it('should handle null value in localStorage', async () => {
       // Explicitly set null (though localStorage.getItem returns null for missing keys)
-      localStorage.setItem("todoApp_tasks", "null");
+      localStorage.setItem('todoApp_tasks', 'null');
 
       const tasks = await repository.getTasks();
 
@@ -181,8 +181,8 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       expect(tasks).toHaveLength(0);
     });
 
-    it("should handle empty string in localStorage", async () => {
-      localStorage.setItem("todoApp_tasks", "");
+    it('should handle empty string in localStorage', async () => {
+      localStorage.setItem('todoApp_tasks', '');
 
       const tasks = await repository.getTasks();
 
@@ -190,8 +190,8 @@ describe("LocalStorageTaskRepository - getTasks() Initialization", () => {
       expect(tasks).toHaveLength(0);
     });
 
-    it("should handle empty array in localStorage", async () => {
-      localStorage.setItem("todoApp_tasks", "[]");
+    it('should handle empty array in localStorage', async () => {
+      localStorage.setItem('todoApp_tasks', '[]');
 
       const tasks = await repository.getTasks();
 

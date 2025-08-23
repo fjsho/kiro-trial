@@ -3,10 +3,10 @@
  * Tests the application initialization logic in isolation
  */
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock all dependencies
-vi.mock("../controllers/UIController.js", () => {
+vi.mock('../controllers/UIController.js', () => {
   return {
     UIController: vi.fn().mockImplementation(() => {
       return {
@@ -18,7 +18,7 @@ vi.mock("../controllers/UIController.js", () => {
   };
 });
 
-vi.mock("../services/TaskService.js", () => {
+vi.mock('../services/TaskService.js', () => {
   return {
     TaskService: vi.fn().mockImplementation(() => {
       return {
@@ -31,7 +31,7 @@ vi.mock("../services/TaskService.js", () => {
   };
 });
 
-vi.mock("../repositories/LocalStorageTaskRepository.js", () => {
+vi.mock('../repositories/LocalStorageTaskRepository.js', () => {
   return {
     LocalStorageTaskRepository: vi.fn().mockImplementation(() => {
       return {
@@ -44,12 +44,12 @@ vi.mock("../repositories/LocalStorageTaskRepository.js", () => {
   };
 });
 
-import { App } from "../main.js";
-import { UIController } from "../controllers/UIController.js";
-import { TaskService } from "../services/TaskService.js";
-import { LocalStorageTaskRepository } from "../repositories/LocalStorageTaskRepository.js";
+import { App } from '../main.js';
+import { UIController } from '../controllers/UIController.js';
+import { TaskService } from '../services/TaskService.js';
+import { LocalStorageTaskRepository } from '../repositories/LocalStorageTaskRepository.js';
 
-describe("App Unit Tests", () => {
+describe('App Unit Tests', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     vi.clearAllMocks();
@@ -81,8 +81,8 @@ describe("App Unit Tests", () => {
     `;
   });
 
-  describe("constructor", () => {
-    it("should create App instance with initial state", () => {
+  describe('constructor', () => {
+    it('should create App instance with initial state', () => {
       const app = new App();
 
       expect(app.getIsInitialized()).toBe(false);
@@ -91,7 +91,7 @@ describe("App Unit Tests", () => {
       expect(app.getRepository()).toBeNull();
     });
 
-    it("should accept configuration options", () => {
+    it('should accept configuration options', () => {
       const config = { enableLogging: false, errorDisplayDuration: 3000 };
       const app = new App(config);
 
@@ -101,7 +101,7 @@ describe("App Unit Tests", () => {
       });
     });
 
-    it("should use default configuration when none provided", () => {
+    it('should use default configuration when none provided', () => {
       const app = new App();
 
       expect(app.getConfig()).toEqual({
@@ -111,8 +111,8 @@ describe("App Unit Tests", () => {
     });
   });
 
-  describe("init()", () => {
-    it("should initialize all dependencies in correct order", async () => {
+  describe('init()', () => {
+    it('should initialize all dependencies in correct order', async () => {
       const app = new App();
 
       await app.init();
@@ -136,7 +136,7 @@ describe("App Unit Tests", () => {
       expect(app.getRepository()).not.toBeNull();
     });
 
-    it("should prevent multiple initializations", async () => {
+    it('should prevent multiple initializations', async () => {
       const app = new App();
 
       await app.init();
@@ -151,54 +151,54 @@ describe("App Unit Tests", () => {
       expect(app.getIsInitialized()).toBe(true);
     });
 
-    it("should validate DOM requirements before initialization", async () => {
+    it('should validate DOM requirements before initialization', async () => {
       // Remove required element
-      document.getElementById("task-list")?.remove();
+      document.getElementById('task-list')?.remove();
 
       const app = new App();
 
       await expect(app.init()).rejects.toThrow(
-        "Missing required DOM elements: task-list"
+        'Missing required DOM elements: task-list'
       );
 
       expect(app.getIsInitialized()).toBe(false);
     });
 
-    it("should handle initialization errors gracefully", async () => {
+    it('should handle initialization errors gracefully', async () => {
       vi.mocked(UIController).mockImplementationOnce(() => {
-        throw new Error("UIController initialization failed");
+        throw new Error('UIController initialization failed');
       });
 
       const app = new App();
 
       await expect(app.init()).rejects.toThrow(
-        "UIController initialization failed"
+        'UIController initialization failed'
       );
 
       expect(app.getIsInitialized()).toBe(false);
 
       // Verify error message is displayed
-      const errorElement = document.getElementById("error-message");
+      const errorElement = document.getElementById('error-message');
       expect(errorElement?.textContent).toBe(
-        "アプリケーションの初期化に失敗しました。ページを再読み込みしてください。"
+        'アプリケーションの初期化に失敗しました。ページを再読み込みしてください。'
       );
-      expect(errorElement?.style.display).toBe("block");
+      expect(errorElement?.style.display).toBe('block');
     });
 
-    it("should handle missing error element gracefully", async () => {
+    it('should handle missing error element gracefully', async () => {
       // Remove error element from DOM
-      document.getElementById("error-message")?.remove();
+      document.getElementById('error-message')?.remove();
 
       const app = new App();
 
       // Should throw DOM validation error first
       await expect(app.init()).rejects.toThrow(
-        "Missing required DOM elements: error-message"
+        'Missing required DOM elements: error-message'
       );
     });
 
-    it("should respect logging configuration", async () => {
-      const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    it('should respect logging configuration', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
       // Reset mocks to ensure clean state
       vi.clearAllMocks();
@@ -222,8 +222,8 @@ describe("App Unit Tests", () => {
     });
   });
 
-  describe("reset()", () => {
-    it("should reset all application state", async () => {
+  describe('reset()', () => {
+    it('should reset all application state', async () => {
       const app = new App();
 
       // Initialize first
@@ -240,7 +240,7 @@ describe("App Unit Tests", () => {
       expect(app.getRepository()).toBeNull();
     });
 
-    it("should allow re-initialization after reset", async () => {
+    it('should allow re-initialization after reset', async () => {
       const app = new App();
 
       // Initialize, reset, and initialize again
@@ -256,7 +256,7 @@ describe("App Unit Tests", () => {
       expect(app.getIsInitialized()).toBe(true);
     });
 
-    it("should be safe to call reset on uninitialized app", () => {
+    it('should be safe to call reset on uninitialized app', () => {
       const app = new App();
 
       // Should not throw
@@ -269,8 +269,8 @@ describe("App Unit Tests", () => {
     });
   });
 
-  describe("getters", () => {
-    it("should return correct initial values", () => {
+  describe('getters', () => {
+    it('should return correct initial values', () => {
       const app = new App();
 
       expect(app.getIsInitialized()).toBe(false);
@@ -279,7 +279,7 @@ describe("App Unit Tests", () => {
       expect(app.getRepository()).toBeNull();
     });
 
-    it("should return correct values after initialization", async () => {
+    it('should return correct values after initialization', async () => {
       const app = new App();
 
       await app.init();
@@ -290,7 +290,7 @@ describe("App Unit Tests", () => {
       expect(app.getRepository()).not.toBeNull();
     });
 
-    it("should return correct values after reset", async () => {
+    it('should return correct values after reset', async () => {
       const app = new App();
 
       await app.init();

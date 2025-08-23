@@ -5,10 +5,10 @@
  * 容量制限に達した場合のエラーハンドリングを検証します。
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
-describe("LocalStorage Error Handling Integration Tests", () => {
+describe('LocalStorage Error Handling Integration Tests', () => {
   let container: HTMLElement;
   let originalLocalStorage: Storage;
 
@@ -91,7 +91,7 @@ describe("LocalStorage Error Handling Integration Tests", () => {
       </div>
     `;
 
-    container = document.getElementById("app")!;
+    container = document.getElementById('app')!;
 
     // LocalStorage の元の実装を保存
     originalLocalStorage = window.localStorage;
@@ -102,23 +102,23 @@ describe("LocalStorage Error Handling Integration Tests", () => {
 
   afterEach(() => {
     // LocalStorage を元に戻す
-    Object.defineProperty(window, "localStorage", {
+    Object.defineProperty(window, 'localStorage', {
       value: originalLocalStorage,
       writable: true,
     });
 
     // DOM をクリア
-    document.body.innerHTML = "";
+    document.body.innerHTML = '';
   });
 
-  describe("LocalStorage setItem エラー", () => {
-    it("LocalStorage.setItem が失敗した場合、エラーメッセージが表示される", async () => {
+  describe('LocalStorage setItem エラー', () => {
+    it('LocalStorage.setItem が失敗した場合、エラーメッセージが表示される', async () => {
       // LocalStorage の setItem をモックして例外を投げる
       const mockLocalStorage = {
         ...originalLocalStorage,
         setItem: vi.fn().mockImplementation(() => {
           throw new Error(
-            "Failed to save tasks to localStorage: Generic error"
+            'Failed to save tasks to localStorage: Generic error'
           );
         }),
         getItem: vi.fn().mockReturnValue(null),
@@ -128,7 +128,7 @@ describe("LocalStorage Error Handling Integration Tests", () => {
         key: vi.fn(),
       };
 
-      Object.defineProperty(window, "localStorage", {
+      Object.defineProperty(window, 'localStorage', {
         value: mockLocalStorage,
         writable: true,
       });
@@ -138,38 +138,38 @@ describe("LocalStorage Error Handling Integration Tests", () => {
 
       // タスク追加を試行
       const taskInput = document.getElementById(
-        "new-task-input"
+        'new-task-input'
       ) as HTMLInputElement;
       const addForm = document.getElementById(
-        "add-task-form"
+        'add-task-form'
       ) as HTMLFormElement;
 
-      taskInput.value = "Test task";
+      taskInput.value = 'Test task';
 
       // フォーム送信イベントを発火
-      const submitEvent = new Event("submit", {
+      const submitEvent = new Event('submit', {
         bubbles: true,
         cancelable: true,
       });
       addForm.dispatchEvent(submitEvent);
 
       // エラーメッセージが表示されることを確認
-      await new Promise((resolve) => setTimeout(resolve, 100)); // 非同期処理を待つ
+      await new Promise(resolve => setTimeout(resolve, 100)); // 非同期処理を待つ
 
-      const errorMessage = document.getElementById("error-message");
+      const errorMessage = document.getElementById('error-message');
       expect(errorMessage).toBeTruthy();
-      expect(errorMessage!.style.display).not.toBe("none");
-      expect(errorMessage!.textContent).toContain("保存に失敗しました");
+      expect(errorMessage!.style.display).not.toBe('none');
+      expect(errorMessage!.textContent).toContain('保存に失敗しました');
     });
   });
 
-  describe("LocalStorage getItem エラー", () => {
-    it("LocalStorage.getItem が失敗した場合、エラーメッセージが表示される", async () => {
+  describe('LocalStorage getItem エラー', () => {
+    it('LocalStorage.getItem が失敗した場合、エラーメッセージが表示される', async () => {
       // LocalStorage の getItem をモックして例外を投げる
       const mockLocalStorage = {
         ...originalLocalStorage,
         getItem: vi.fn().mockImplementation(() => {
-          throw new Error("SecurityError: LocalStorage access denied");
+          throw new Error('SecurityError: LocalStorage access denied');
         }),
         setItem: vi.fn(),
         removeItem: vi.fn(),
@@ -178,7 +178,7 @@ describe("LocalStorage Error Handling Integration Tests", () => {
         key: vi.fn(),
       };
 
-      Object.defineProperty(window, "localStorage", {
+      Object.defineProperty(window, 'localStorage', {
         value: mockLocalStorage,
         writable: true,
       });
@@ -187,25 +187,25 @@ describe("LocalStorage Error Handling Integration Tests", () => {
       const uiController = new UIController();
 
       // エラーメッセージが表示されることを確認
-      await new Promise((resolve) => setTimeout(resolve, 100)); // 非同期処理を待つ
+      await new Promise(resolve => setTimeout(resolve, 100)); // 非同期処理を待つ
 
-      const errorMessage = document.getElementById("error-message");
+      const errorMessage = document.getElementById('error-message');
       expect(errorMessage).toBeTruthy();
-      expect(errorMessage!.style.display).not.toBe("none");
+      expect(errorMessage!.style.display).not.toBe('none');
       expect(errorMessage!.textContent).toContain(
-        "データの読み込みに失敗しました"
+        'データの読み込みに失敗しました'
       );
     });
   });
 
-  describe("LocalStorage 容量制限エラー", () => {
-    it("LocalStorage の容量制限に達した場合、適切なエラーメッセージが表示される", async () => {
+  describe('LocalStorage 容量制限エラー', () => {
+    it('LocalStorage の容量制限に達した場合、適切なエラーメッセージが表示される', async () => {
       // QuotaExceededError をシミュレート
       const mockLocalStorage = {
         ...originalLocalStorage,
         setItem: vi.fn().mockImplementation(() => {
-          const error = new Error("QuotaExceededError");
-          error.name = "QuotaExceededError";
+          const error = new Error('QuotaExceededError');
+          error.name = 'QuotaExceededError';
           throw error;
         }),
         getItem: vi.fn().mockReturnValue(null),
@@ -215,7 +215,7 @@ describe("LocalStorage Error Handling Integration Tests", () => {
         key: vi.fn(),
       };
 
-      Object.defineProperty(window, "localStorage", {
+      Object.defineProperty(window, 'localStorage', {
         value: mockLocalStorage,
         writable: true,
       });
@@ -225,40 +225,40 @@ describe("LocalStorage Error Handling Integration Tests", () => {
 
       // タスク追加を試行
       const taskInput = document.getElementById(
-        "new-task-input"
+        'new-task-input'
       ) as HTMLInputElement;
       const addForm = document.getElementById(
-        "add-task-form"
+        'add-task-form'
       ) as HTMLFormElement;
 
-      taskInput.value = "Test task";
+      taskInput.value = 'Test task';
 
       // フォーム送信イベントを発火
-      const submitEvent = new Event("submit", {
+      const submitEvent = new Event('submit', {
         bubbles: true,
         cancelable: true,
       });
       addForm.dispatchEvent(submitEvent);
 
       // 容量制限エラーメッセージが表示されることを確認
-      await new Promise((resolve) => setTimeout(resolve, 100)); // 非同期処理を待つ
+      await new Promise(resolve => setTimeout(resolve, 100)); // 非同期処理を待つ
 
-      const errorMessage = document.getElementById("error-message");
+      const errorMessage = document.getElementById('error-message');
       expect(errorMessage).toBeTruthy();
-      expect(errorMessage!.style.display).not.toBe("none");
+      expect(errorMessage!.style.display).not.toBe('none');
       expect(errorMessage!.textContent).toContain(
-        "ストレージの容量が不足しています"
+        'ストレージの容量が不足しています'
       );
     });
   });
 
-  describe("エラーメッセージの自動非表示", () => {
-    it("エラーメッセージは一定時間後に自動的に非表示になる", async () => {
+  describe('エラーメッセージの自動非表示', () => {
+    it('エラーメッセージは一定時間後に自動的に非表示になる', async () => {
       // LocalStorage エラーをシミュレート
       const mockLocalStorage = {
         ...originalLocalStorage,
         setItem: vi.fn().mockImplementation(() => {
-          throw new Error("LocalStorage error");
+          throw new Error('LocalStorage error');
         }),
         getItem: vi.fn().mockReturnValue(null),
         removeItem: vi.fn(),
@@ -267,7 +267,7 @@ describe("LocalStorage Error Handling Integration Tests", () => {
         key: vi.fn(),
       };
 
-      Object.defineProperty(window, "localStorage", {
+      Object.defineProperty(window, 'localStorage', {
         value: mockLocalStorage,
         writable: true,
       });
@@ -277,29 +277,29 @@ describe("LocalStorage Error Handling Integration Tests", () => {
 
       // タスク追加を試行してエラーを発生させる
       const taskInput = document.getElementById(
-        "new-task-input"
+        'new-task-input'
       ) as HTMLInputElement;
       const addForm = document.getElementById(
-        "add-task-form"
+        'add-task-form'
       ) as HTMLFormElement;
 
-      taskInput.value = "Test task";
+      taskInput.value = 'Test task';
 
-      const submitEvent = new Event("submit", {
+      const submitEvent = new Event('submit', {
         bubbles: true,
         cancelable: true,
       });
       addForm.dispatchEvent(submitEvent);
 
       // エラーメッセージが表示されることを確認
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
 
-      const errorMessage = document.getElementById("error-message");
-      expect(errorMessage!.style.display).not.toBe("none");
+      const errorMessage = document.getElementById('error-message');
+      expect(errorMessage!.style.display).not.toBe('none');
 
       // 5秒後にエラーメッセージが非表示になることを確認
-      await new Promise((resolve) => setTimeout(resolve, 5100));
-      expect(errorMessage!.style.display).toBe("none");
+      await new Promise(resolve => setTimeout(resolve, 5100));
+      expect(errorMessage!.style.display).toBe('none');
     }, 10000); // 10秒のタイムアウト
   });
 });

@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -18,11 +18,11 @@ const localStorageMock = (() => {
   };
 })();
 
-Object.defineProperty(window, "localStorage", {
+Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-describe("UIController Filter Button States Unit Tests", () => {
+describe('UIController Filter Button States Unit Tests', () => {
   let uiController: UIController;
 
   beforeEach(() => {
@@ -50,149 +50,149 @@ describe("UIController Filter Button States Unit Tests", () => {
     uiController = new UIController();
   });
 
-  describe("updateFilterButtonStates method", () => {
+  describe('updateFilterButtonStates method', () => {
     it("should set 'all' button as active and others as inactive", async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // First set a different button as active to test the change
-      activeButton.classList.add("active");
-      activeButton.setAttribute("aria-pressed", "true");
-      allButton.classList.remove("active");
-      allButton.setAttribute("aria-pressed", "false");
+      activeButton.classList.add('active');
+      activeButton.setAttribute('aria-pressed', 'true');
+      allButton.classList.remove('active');
+      allButton.setAttribute('aria-pressed', 'false');
 
       // Call handleFilterChange to trigger updateFilterButtonStates
-      await uiController.handleFilterChange("all");
+      await uiController.handleFilterChange('all');
 
       // Verify 'all' button is active
-      expect(allButton.classList.contains("active")).toBe(true);
-      expect(allButton.getAttribute("aria-pressed")).toBe("true");
+      expect(allButton.classList.contains('active')).toBe(true);
+      expect(allButton.getAttribute('aria-pressed')).toBe('true');
 
       // Verify other buttons are inactive
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("false");
-      expect(completedButton.classList.contains("active")).toBe(false);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("false");
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('false');
+      expect(completedButton.classList.contains('active')).toBe(false);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('false');
     });
 
     it("should set 'active' button as active and others as inactive", async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // Call handleFilterChange to trigger updateFilterButtonStates
-      await uiController.handleFilterChange("active");
+      await uiController.handleFilterChange('active');
 
       // Verify 'active' button is active
-      expect(activeButton.classList.contains("active")).toBe(true);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("true");
+      expect(activeButton.classList.contains('active')).toBe(true);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('true');
 
       // Verify other buttons are inactive
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(allButton.getAttribute("aria-pressed")).toBe("false");
-      expect(completedButton.classList.contains("active")).toBe(false);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("false");
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(allButton.getAttribute('aria-pressed')).toBe('false');
+      expect(completedButton.classList.contains('active')).toBe(false);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('false');
     });
 
     it("should set 'completed' button as active and others as inactive", async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // Call handleFilterChange to trigger updateFilterButtonStates
-      await uiController.handleFilterChange("completed");
+      await uiController.handleFilterChange('completed');
 
       // Verify 'completed' button is active
-      expect(completedButton.classList.contains("active")).toBe(true);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("true");
+      expect(completedButton.classList.contains('active')).toBe(true);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('true');
 
       // Verify other buttons are inactive
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(allButton.getAttribute("aria-pressed")).toBe("false");
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("false");
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(allButton.getAttribute('aria-pressed')).toBe('false');
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('false');
     });
 
-    it("should handle missing filter buttons gracefully", async () => {
+    it('should handle missing filter buttons gracefully', async () => {
       // Remove all filter buttons
-      document.querySelectorAll(".filter-btn").forEach((btn) => btn.remove());
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.remove());
 
       // This should not throw an error
       expect(async () => {
-        await uiController.handleFilterChange("all");
+        await uiController.handleFilterChange('all');
       }).not.toThrow();
     });
 
-    it("should handle buttons without data-filter attribute", async () => {
+    it('should handle buttons without data-filter attribute', async () => {
       // Add a button without data-filter attribute
-      const invalidButton = document.createElement("button");
-      invalidButton.className = "filter-btn";
-      invalidButton.textContent = "Invalid";
+      const invalidButton = document.createElement('button');
+      invalidButton.className = 'filter-btn';
+      invalidButton.textContent = 'Invalid';
       document.body.appendChild(invalidButton);
 
       // This should not throw an error and should set the button as inactive
-      await uiController.handleFilterChange("all");
+      await uiController.handleFilterChange('all');
 
       // Invalid button should not have active class but should have aria-pressed="false"
-      expect(invalidButton.classList.contains("active")).toBe(false);
-      expect(invalidButton.getAttribute("aria-pressed")).toBe("false");
+      expect(invalidButton.classList.contains('active')).toBe(false);
+      expect(invalidButton.getAttribute('aria-pressed')).toBe('false');
     });
 
-    it("should properly toggle between different filter states", async () => {
+    it('should properly toggle between different filter states', async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // Test sequence: all -> active -> completed -> all
 
       // Start with 'all'
-      await uiController.handleFilterChange("all");
-      expect(allButton.classList.contains("active")).toBe(true);
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(completedButton.classList.contains("active")).toBe(false);
+      await uiController.handleFilterChange('all');
+      expect(allButton.classList.contains('active')).toBe(true);
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(completedButton.classList.contains('active')).toBe(false);
 
       // Switch to 'active'
-      await uiController.handleFilterChange("active");
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(activeButton.classList.contains("active")).toBe(true);
-      expect(completedButton.classList.contains("active")).toBe(false);
+      await uiController.handleFilterChange('active');
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(activeButton.classList.contains('active')).toBe(true);
+      expect(completedButton.classList.contains('active')).toBe(false);
 
       // Switch to 'completed'
-      await uiController.handleFilterChange("completed");
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(completedButton.classList.contains("active")).toBe(true);
+      await uiController.handleFilterChange('completed');
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(completedButton.classList.contains('active')).toBe(true);
 
       // Switch back to 'all'
-      await uiController.handleFilterChange("all");
-      expect(allButton.classList.contains("active")).toBe(true);
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(completedButton.classList.contains("active")).toBe(false);
+      await uiController.handleFilterChange('all');
+      expect(allButton.classList.contains('active')).toBe(true);
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(completedButton.classList.contains('active')).toBe(false);
     });
   });
 });

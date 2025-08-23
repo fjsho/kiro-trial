@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { generateUniqueId, generateTaskId } from "../utils/idGenerator";
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { generateUniqueId, generateTaskId } from '../utils/idGenerator';
 
-describe("idGenerator", () => {
-  describe("generateUniqueId", () => {
+describe('idGenerator', () => {
+  describe('generateUniqueId', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -11,7 +11,7 @@ describe("idGenerator", () => {
       vi.useRealTimers();
     });
 
-    it("should generate a unique ID with timestamp and random component", () => {
+    it('should generate a unique ID with timestamp and random component', () => {
       const mockTime = 1234567890123;
       vi.setSystemTime(mockTime);
 
@@ -21,7 +21,7 @@ describe("idGenerator", () => {
       expect(id).toContain(mockTime.toString());
     });
 
-    it("should generate different IDs when called multiple times", () => {
+    it('should generate different IDs when called multiple times', () => {
       vi.useRealTimers(); // Use real timers for this test to ensure randomness
 
       const ids = new Set();
@@ -36,7 +36,7 @@ describe("idGenerator", () => {
       expect(ids.size).toBe(iterations);
     });
 
-    it("should generate IDs with different timestamps when called at different times", () => {
+    it('should generate IDs with different timestamps when called at different times', () => {
       const time1 = 1234567890123;
       const time2 = 1234567890124;
 
@@ -47,13 +47,13 @@ describe("idGenerator", () => {
       const id2 = generateUniqueId();
 
       expect(id1).not.toBe(id2);
-      expect(id1.split("-")[0]).toBe(time1.toString());
-      expect(id2.split("-")[0]).toBe(time2.toString());
+      expect(id1.split('-')[0]).toBe(time1.toString());
+      expect(id2.split('-')[0]).toBe(time2.toString());
     });
 
-    it("should generate IDs with 9-character random suffix", () => {
+    it('should generate IDs with 9-character random suffix', () => {
       const id = generateUniqueId();
-      const parts = id.split("-");
+      const parts = id.split('-');
 
       expect(parts).toHaveLength(2);
       expect(parts[1]).toHaveLength(9);
@@ -61,7 +61,7 @@ describe("idGenerator", () => {
     });
   });
 
-  describe("generateTaskId", () => {
+  describe('generateTaskId', () => {
     beforeEach(() => {
       vi.useFakeTimers();
     });
@@ -74,10 +74,10 @@ describe("idGenerator", () => {
       const taskId = generateTaskId();
 
       expect(taskId).toMatch(/^task-\d+-[a-z0-9]{9}$/);
-      expect(taskId.startsWith("task-")).toBe(true);
+      expect(taskId.startsWith('task-')).toBe(true);
     });
 
-    it("should generate different task IDs when called multiple times", () => {
+    it('should generate different task IDs when called multiple times', () => {
       vi.useRealTimers(); // Use real timers for this test to ensure randomness
 
       const taskIds = new Set();
@@ -92,7 +92,7 @@ describe("idGenerator", () => {
       expect(taskIds.size).toBe(iterations);
     });
 
-    it("should have correct format structure", () => {
+    it('should have correct format structure', () => {
       const mockTime = 1234567890123;
       vi.setSystemTime(mockTime);
 
@@ -107,7 +107,7 @@ describe("idGenerator", () => {
       expect(randomPart).toMatch(/^[a-z0-9]{9}$/);
     });
 
-    it("should use generateUniqueId internally", () => {
+    it('should use generateUniqueId internally', () => {
       const mockTime = 1234567890123;
       vi.setSystemTime(mockTime);
 
@@ -118,7 +118,7 @@ describe("idGenerator", () => {
       expect(taskId.startsWith(`task-${mockTime}-`)).toBe(true);
 
       // Extract and verify the random part has the same format as generateUniqueId
-      const randomPart = taskId.split("-")[2];
+      const randomPart = taskId.split('-')[2];
       expect(randomPart).toHaveLength(9);
       expect(randomPart).toMatch(/^[a-z0-9]{9}$/);
     });

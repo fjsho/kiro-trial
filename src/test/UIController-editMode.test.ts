@@ -5,12 +5,12 @@
  * in the UIController class.
  */
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Mock the TaskService and LocalStorageTaskRepository
-vi.mock("../services/TaskService.js");
-vi.mock("../repositories/LocalStorageTaskRepository.js");
+vi.mock('../services/TaskService.js');
+vi.mock('../repositories/LocalStorageTaskRepository.js');
 
 // Setup DOM environment for testing
 function setupDOM(): void {
@@ -95,10 +95,10 @@ function createMockTaskElement(
   taskId: string,
   taskText: string
 ): HTMLLIElement {
-  const taskItem = document.createElement("li");
-  taskItem.className = "task-item";
-  taskItem.setAttribute("data-task-id", taskId);
-  taskItem.setAttribute("role", "listitem");
+  const taskItem = document.createElement('li');
+  taskItem.className = 'task-item';
+  taskItem.setAttribute('data-task-id', taskId);
+  taskItem.setAttribute('role', 'listitem');
 
   taskItem.innerHTML = `
     <div class="task-content">
@@ -125,7 +125,7 @@ function createMockTaskElement(
   return taskItem;
 }
 
-describe("UIController Edit Mode State Management", () => {
+describe('UIController Edit Mode State Management', () => {
   let uiController: UIController;
 
   beforeEach(() => {
@@ -139,21 +139,21 @@ describe("UIController Edit Mode State Management", () => {
     uiController = new UIController();
   });
 
-  describe("Edit Mode State Tracking", () => {
-    it("should track editing state when entering edit mode", () => {
+  describe('Edit Mode State Tracking', () => {
+    it('should track editing state when entering edit mode', () => {
       // Arrange: Create a task element and add it to the DOM
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const taskTextElement = taskElement.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Act: Trigger double-click to enter edit mode
-      const dblClickEvent = new MouseEvent("dblclick", {
+      const dblClickEvent = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -165,36 +165,36 @@ describe("UIController Edit Mode State Management", () => {
       expect((uiController as any).editingTaskId).toBe(taskId);
     });
 
-    it("should prevent entering edit mode when already editing another task", () => {
+    it('should prevent entering edit mode when already editing another task', () => {
       // Arrange: Create two task elements
-      const taskId1 = "test-task-1";
-      const taskId2 = "test-task-2";
-      const taskText1 = "First task";
-      const taskText2 = "Second task";
+      const taskId1 = 'test-task-1';
+      const taskId2 = 'test-task-2';
+      const taskText1 = 'First task';
+      const taskText2 = 'Second task';
 
       const taskElement1 = createMockTaskElement(taskId1, taskText1);
       const taskElement2 = createMockTaskElement(taskId2, taskText2);
 
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement1);
       taskList.appendChild(taskElement2);
 
       const taskTextElement1 = taskElement1.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
       const taskTextElement2 = taskElement2.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Act: Enter edit mode for first task
-      const dblClickEvent1 = new MouseEvent("dblclick", {
+      const dblClickEvent1 = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
       taskTextElement1.dispatchEvent(dblClickEvent1);
 
       // Try to enter edit mode for second task
-      const dblClickEvent2 = new MouseEvent("dblclick", {
+      const dblClickEvent2 = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -204,24 +204,24 @@ describe("UIController Edit Mode State Management", () => {
       expect((uiController as any).editingTaskId).toBe(taskId1);
 
       // Second task should not have edit input
-      const editInput2 = taskElement2.querySelector(".task-edit-input");
+      const editInput2 = taskElement2.querySelector('.task-edit-input');
       expect(editInput2).toBeNull();
     });
 
-    it("should clear editing state when edit mode is exited", () => {
+    it('should clear editing state when edit mode is exited', () => {
       // Arrange: Create a task element and enter edit mode
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const taskTextElement = taskElement.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Enter edit mode first
-      const dblClickEvent = new MouseEvent("dblclick", {
+      const dblClickEvent = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -229,33 +229,33 @@ describe("UIController Edit Mode State Management", () => {
 
       // Verify we're in edit mode
       expect((uiController as any).editingTaskId).toBe(taskId);
-      expect(taskElement.querySelector(".task-edit-input")).toBeTruthy();
+      expect(taskElement.querySelector('.task-edit-input')).toBeTruthy();
 
       // Act: Exit edit mode
       (uiController as any).exitEditMode();
 
       // Assert: Editing state should be cleared
       expect((uiController as any).editingTaskId).toBeNull();
-      expect(taskElement.querySelector(".task-edit-input")).toBeNull();
-      expect(taskTextElement.style.display).toBe("");
+      expect(taskElement.querySelector('.task-edit-input')).toBeNull();
+      expect(taskTextElement.style.display).toBe('');
     });
   });
 
-  describe("Edit Input Creation", () => {
-    it("should create edit input with correct attributes", () => {
+  describe('Edit Input Creation', () => {
+    it('should create edit input with correct attributes', () => {
       // Arrange: Create a task element
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const taskTextElement = taskElement.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Act: Enter edit mode
-      const dblClickEvent = new MouseEvent("dblclick", {
+      const dblClickEvent = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -263,53 +263,53 @@ describe("UIController Edit Mode State Management", () => {
 
       // Assert: Edit input should have correct attributes
       const editInput = taskElement.querySelector(
-        ".task-edit-input"
+        '.task-edit-input'
       ) as HTMLInputElement;
       expect(editInput).toBeTruthy();
-      expect(editInput.type).toBe("text");
-      expect(editInput.className).toBe("task-edit-input");
+      expect(editInput.type).toBe('text');
+      expect(editInput.className).toBe('task-edit-input');
       expect(editInput.value).toBe(taskText);
-      expect(editInput.getAttribute("data-task-id")).toBe(taskId);
-      expect(editInput.getAttribute("aria-label")).toBe("タスクを編集");
+      expect(editInput.getAttribute('data-task-id')).toBe(taskId);
+      expect(editInput.getAttribute('aria-label')).toBe('タスクを編集');
     });
 
-    it("should hide original task text when edit input is created", () => {
+    it('should hide original task text when edit input is created', () => {
       // Arrange: Create a task element
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const taskTextElement = taskElement.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Act: Enter edit mode
-      const dblClickEvent = new MouseEvent("dblclick", {
+      const dblClickEvent = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
       taskTextElement.dispatchEvent(dblClickEvent);
 
       // Assert: Original task text should be hidden
-      expect(taskTextElement.style.display).toBe("none");
+      expect(taskTextElement.style.display).toBe('none');
     });
 
-    it("should focus and select text in edit input", () => {
+    it('should focus and select text in edit input', () => {
       // Arrange: Create a task element
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const taskTextElement = taskElement.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Act: Enter edit mode
-      const dblClickEvent = new MouseEvent("dblclick", {
+      const dblClickEvent = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -317,7 +317,7 @@ describe("UIController Edit Mode State Management", () => {
 
       // Assert: Edit input should be focused
       const editInput = taskElement.querySelector(
-        ".task-edit-input"
+        '.task-edit-input'
       ) as HTMLInputElement;
       expect(document.activeElement).toBe(editInput);
 
@@ -325,24 +325,24 @@ describe("UIController Edit Mode State Management", () => {
     });
   });
 
-  describe("Event Target Validation", () => {
-    it("should only respond to double-clicks on task text elements", () => {
+  describe('Event Target Validation', () => {
+    it('should only respond to double-clicks on task text elements', () => {
       // Arrange: Create a task element
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const checkbox = taskElement.querySelector(
-        ".task-checkbox"
+        '.task-checkbox'
       ) as HTMLElement;
       const deleteButton = taskElement.querySelector(
-        ".delete-btn"
+        '.delete-btn'
       ) as HTMLElement;
 
       // Act: Double-click on checkbox (should not enter edit mode)
-      const dblClickEvent1 = new MouseEvent("dblclick", {
+      const dblClickEvent1 = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -350,10 +350,10 @@ describe("UIController Edit Mode State Management", () => {
 
       // Assert: Should not be in edit mode
       expect((uiController as any).editingTaskId).toBeNull();
-      expect(taskElement.querySelector(".task-edit-input")).toBeNull();
+      expect(taskElement.querySelector('.task-edit-input')).toBeNull();
 
       // Act: Double-click on delete button (should not enter edit mode)
-      const dblClickEvent2 = new MouseEvent("dblclick", {
+      const dblClickEvent2 = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -361,23 +361,23 @@ describe("UIController Edit Mode State Management", () => {
 
       // Assert: Should still not be in edit mode
       expect((uiController as any).editingTaskId).toBeNull();
-      expect(taskElement.querySelector(".task-edit-input")).toBeNull();
+      expect(taskElement.querySelector('.task-edit-input')).toBeNull();
     });
 
-    it("should handle double-click on task text element correctly", () => {
+    it('should handle double-click on task text element correctly', () => {
       // Arrange: Create a task element
-      const taskId = "test-task-1";
-      const taskText = "Test task for editing";
+      const taskId = 'test-task-1';
+      const taskText = 'Test task for editing';
       const taskElement = createMockTaskElement(taskId, taskText);
-      const taskList = document.getElementById("task-list")!;
+      const taskList = document.getElementById('task-list')!;
       taskList.appendChild(taskElement);
 
       const taskTextElement = taskElement.querySelector(
-        ".task-text"
+        '.task-text'
       ) as HTMLElement;
 
       // Act: Double-click on task text (should enter edit mode)
-      const dblClickEvent = new MouseEvent("dblclick", {
+      const dblClickEvent = new MouseEvent('dblclick', {
         bubbles: true,
         cancelable: true,
       });
@@ -385,7 +385,7 @@ describe("UIController Edit Mode State Management", () => {
 
       // Assert: Should be in edit mode
       expect((uiController as any).editingTaskId).toBe(taskId);
-      expect(taskElement.querySelector(".task-edit-input")).toBeTruthy();
+      expect(taskElement.querySelector('.task-edit-input')).toBeTruthy();
     });
   });
 });

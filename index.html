@@ -18,51 +18,69 @@
       <main class="app-main">
         <section class="input-section">
           <form id="add-task-form" class="add-task-form">
-            <label for="new-task-input" class="visually-hidden">新しいタスクを入力</label>
-            <input 
-              type="text" 
-              id="new-task-input" 
+            <label for="new-task-input" class="visually-hidden"
+              >新しいタスクを入力</label
+            >
+            <input
+              type="text"
+              id="new-task-input"
               class="new-task-input"
               placeholder="新しいタスクを入力..."
               aria-describedby="input-help"
               maxlength="500"
               required
             />
-            <span id="input-help" class="visually-hidden">Enterキーまたは追加ボタンでタスクを追加できます</span>
-            <button type="submit" id="add-task-btn" class="add-task-btn" aria-label="タスクを追加">
+            <span id="input-help" class="visually-hidden"
+              >Enterキーまたは追加ボタンでタスクを追加できます</span
+            >
+            <button
+              type="submit"
+              id="add-task-btn"
+              class="add-task-btn"
+              aria-label="タスクを追加"
+            >
               追加
             </button>
           </form>
           <!-- エラーメッセージ表示エリア -->
-          <div id="error-message" class="error-message" style="display: none;" role="alert" aria-live="assertive">
-          </div>
+          <div
+            id="error-message"
+            class="error-message"
+            style="display: none"
+            role="alert"
+            aria-live="assertive"
+          ></div>
         </section>
 
         <section class="filter-section">
           <h2 class="visually-hidden">タスクフィルター</h2>
-          <div class="filter-buttons" role="group" aria-label="タスクフィルター">
-            <button 
-              type="button" 
-              id="filter-all" 
-              class="filter-btn active" 
+          <div
+            class="filter-buttons"
+            role="group"
+            aria-label="タスクフィルター"
+          >
+            <button
+              type="button"
+              id="filter-all"
+              class="filter-btn active"
               data-filter="all"
               aria-pressed="true"
             >
               すべて
             </button>
-            <button 
-              type="button" 
-              id="filter-active" 
-              class="filter-btn" 
+            <button
+              type="button"
+              id="filter-active"
+              class="filter-btn"
               data-filter="active"
               aria-pressed="false"
             >
               未完了
             </button>
-            <button 
-              type="button" 
-              id="filter-completed" 
-              class="filter-btn" 
+            <button
+              type="button"
+              id="filter-completed"
+              class="filter-btn"
               data-filter="completed"
               aria-pressed="false"
             >
@@ -76,7 +94,7 @@
           <ul id="task-list" class="task-list" role="list">
             <!-- Tasks will be dynamically added here -->
           </ul>
-          <div id="empty-state" class="empty-state" style="display: none;">
+          <div id="empty-state" class="empty-state" style="display: none">
             <p>タスクがありません。新しいタスクを追加してください。</p>
           </div>
         </section>

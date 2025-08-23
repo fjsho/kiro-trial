@@ -1,4 +1,4 @@
-import type { Task } from "../models/Task.js";
+import type { Task } from '../models/Task.js';
 
 export interface TaskRepository {
   addTask(task: Task): Promise<Task>;

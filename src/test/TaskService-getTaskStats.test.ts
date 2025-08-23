@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { TaskService } from "../services/TaskService.js";
-import type { TaskRepository } from "../repositories/TaskRepository.js";
-import { TaskModel } from "../models/Task.js";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { TaskService } from '../services/TaskService.js';
+import type { TaskRepository } from '../repositories/TaskRepository.js';
+import { TaskModel } from '../models/Task.js';
 
-describe("TaskService.getTaskStats() Unit Tests", () => {
+describe('TaskService.getTaskStats() Unit Tests', () => {
   let taskService: TaskService;
   let mockRepository: TaskRepository;
 
@@ -19,7 +19,7 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     taskService = new TaskService(mockRepository);
   });
 
-  it("should return correct stats for empty task list", async () => {
+  it('should return correct stats for empty task list', async () => {
     // Arrange
     vi.mocked(mockRepository.getTasks).mockResolvedValue([]);
 
@@ -35,12 +35,12 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should return correct stats for tasks with no completed tasks", async () => {
+  it('should return correct stats for tasks with no completed tasks', async () => {
     // Arrange
     const tasks = [
-      new TaskModel("1", "Task 1", false),
-      new TaskModel("2", "Task 2", false),
-      new TaskModel("3", "Task 3", false),
+      new TaskModel('1', 'Task 1', false),
+      new TaskModel('2', 'Task 2', false),
+      new TaskModel('3', 'Task 3', false),
     ];
     vi.mocked(mockRepository.getTasks).mockResolvedValue(tasks);
 
@@ -56,11 +56,11 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should return correct stats for tasks with all completed tasks", async () => {
+  it('should return correct stats for tasks with all completed tasks', async () => {
     // Arrange
     const tasks = [
-      new TaskModel("1", "Task 1", true),
-      new TaskModel("2", "Task 2", true),
+      new TaskModel('1', 'Task 1', true),
+      new TaskModel('2', 'Task 2', true),
     ];
     vi.mocked(mockRepository.getTasks).mockResolvedValue(tasks);
 
@@ -76,14 +76,14 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should return correct stats for mixed completed and active tasks", async () => {
+  it('should return correct stats for mixed completed and active tasks', async () => {
     // Arrange
     const tasks = [
-      new TaskModel("1", "Task 1", true), // completed
-      new TaskModel("2", "Task 2", false), // active
-      new TaskModel("3", "Task 3", true), // completed
-      new TaskModel("4", "Task 4", false), // active
-      new TaskModel("5", "Task 5", false), // active
+      new TaskModel('1', 'Task 1', true), // completed
+      new TaskModel('2', 'Task 2', false), // active
+      new TaskModel('3', 'Task 3', true), // completed
+      new TaskModel('4', 'Task 4', false), // active
+      new TaskModel('5', 'Task 5', false), // active
     ];
     vi.mocked(mockRepository.getTasks).mockResolvedValue(tasks);
 
@@ -99,9 +99,9 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should return correct stats for single completed task", async () => {
+  it('should return correct stats for single completed task', async () => {
     // Arrange
-    const tasks = [new TaskModel("1", "Single completed task", true)];
+    const tasks = [new TaskModel('1', 'Single completed task', true)];
     vi.mocked(mockRepository.getTasks).mockResolvedValue(tasks);
 
     // Act
@@ -116,9 +116,9 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should return correct stats for single active task", async () => {
+  it('should return correct stats for single active task', async () => {
     // Arrange
-    const tasks = [new TaskModel("1", "Single active task", false)];
+    const tasks = [new TaskModel('1', 'Single active task', false)];
     vi.mocked(mockRepository.getTasks).mockResolvedValue(tasks);
 
     // Act
@@ -133,19 +133,19 @@ describe("TaskService.getTaskStats() Unit Tests", () => {
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should handle repository errors gracefully", async () => {
+  it('should handle repository errors gracefully', async () => {
     // Arrange
-    const error = new Error("Repository error");
+    const error = new Error('Repository error');
     vi.mocked(mockRepository.getTasks).mockRejectedValue(error);
 
     // Act & Assert
     await expect(taskService.getTaskStats()).rejects.toThrow(
-      "Repository error"
+      'Repository error'
     );
     expect(mockRepository.getTasks).toHaveBeenCalledOnce();
   });
 
-  it("should calculate stats correctly with large number of tasks", async () => {
+  it('should calculate stats correctly with large number of tasks', async () => {
     // Arrange
     const tasks = [];
     const totalTasks = 100;

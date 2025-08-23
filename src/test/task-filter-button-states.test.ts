@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -18,11 +18,11 @@ const localStorageMock = (() => {
   };
 })();
 
-Object.defineProperty(window, "localStorage", {
+Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-describe("Filter Button States Integration Tests", () => {
+describe('Filter Button States Integration Tests', () => {
   let uiController: UIController;
 
   beforeEach(() => {
@@ -102,145 +102,145 @@ describe("Filter Button States Integration Tests", () => {
     uiController = new UIController();
   });
 
-  describe("Filter Button Active State Management", () => {
+  describe('Filter Button Active State Management', () => {
     it("should have 'all' filter button active by default", () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
-      expect(allButton.classList.contains("active")).toBe(true);
-      expect(allButton.getAttribute("aria-pressed")).toBe("true");
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("false");
-      expect(completedButton.classList.contains("active")).toBe(false);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("false");
+      expect(allButton.classList.contains('active')).toBe(true);
+      expect(allButton.getAttribute('aria-pressed')).toBe('true');
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('false');
+      expect(completedButton.classList.contains('active')).toBe(false);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('false');
     });
 
     it("should switch active state when clicking 'active' filter button", async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // Click the active filter button
       activeButton.click();
 
       // Wait for async operations to complete
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       // Check that active button is now active
-      expect(activeButton.classList.contains("active")).toBe(true);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("true");
+      expect(activeButton.classList.contains('active')).toBe(true);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('true');
 
       // Check that other buttons are not active
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(allButton.getAttribute("aria-pressed")).toBe("false");
-      expect(completedButton.classList.contains("active")).toBe(false);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("false");
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(allButton.getAttribute('aria-pressed')).toBe('false');
+      expect(completedButton.classList.contains('active')).toBe(false);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('false');
     });
 
     it("should switch active state when clicking 'completed' filter button", async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // Click the completed filter button
       completedButton.click();
 
       // Wait for async operations to complete
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       // Check that completed button is now active
-      expect(completedButton.classList.contains("active")).toBe(true);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("true");
+      expect(completedButton.classList.contains('active')).toBe(true);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('true');
 
       // Check that other buttons are not active
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(allButton.getAttribute("aria-pressed")).toBe("false");
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("false");
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(allButton.getAttribute('aria-pressed')).toBe('false');
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('false');
     });
 
     it("should switch back to 'all' filter button when clicked", async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // First click active filter
       activeButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       // Then click all filter
       allButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       // Check that all button is now active
-      expect(allButton.classList.contains("active")).toBe(true);
-      expect(allButton.getAttribute("aria-pressed")).toBe("true");
+      expect(allButton.classList.contains('active')).toBe(true);
+      expect(allButton.getAttribute('aria-pressed')).toBe('true');
 
       // Check that other buttons are not active
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(activeButton.getAttribute("aria-pressed")).toBe("false");
-      expect(completedButton.classList.contains("active")).toBe(false);
-      expect(completedButton.getAttribute("aria-pressed")).toBe("false");
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(activeButton.getAttribute('aria-pressed')).toBe('false');
+      expect(completedButton.classList.contains('active')).toBe(false);
+      expect(completedButton.getAttribute('aria-pressed')).toBe('false');
     });
 
-    it("should maintain active state consistency when switching between filters", async () => {
+    it('should maintain active state consistency when switching between filters', async () => {
       const allButton = document.getElementById(
-        "filter-all"
+        'filter-all'
       ) as HTMLButtonElement;
       const activeButton = document.getElementById(
-        "filter-active"
+        'filter-active'
       ) as HTMLButtonElement;
       const completedButton = document.getElementById(
-        "filter-completed"
+        'filter-completed'
       ) as HTMLButtonElement;
 
       // Test sequence: all -> active -> completed -> all
 
       // Click active
       activeButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      expect(activeButton.classList.contains("active")).toBe(true);
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(completedButton.classList.contains("active")).toBe(false);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(activeButton.classList.contains('active')).toBe(true);
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(completedButton.classList.contains('active')).toBe(false);
 
       // Click completed
       completedButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      expect(completedButton.classList.contains("active")).toBe(true);
-      expect(allButton.classList.contains("active")).toBe(false);
-      expect(activeButton.classList.contains("active")).toBe(false);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(completedButton.classList.contains('active')).toBe(true);
+      expect(allButton.classList.contains('active')).toBe(false);
+      expect(activeButton.classList.contains('active')).toBe(false);
 
       // Click all
       allButton.click();
-      await new Promise((resolve) => setTimeout(resolve, 0));
-      expect(allButton.classList.contains("active")).toBe(true);
-      expect(activeButton.classList.contains("active")).toBe(false);
-      expect(completedButton.classList.contains("active")).toBe(false);
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(allButton.classList.contains('active')).toBe(true);
+      expect(activeButton.classList.contains('active')).toBe(false);
+      expect(completedButton.classList.contains('active')).toBe(false);
     });
   });
 });

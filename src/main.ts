@@ -1,7 +1,7 @@
-import "./style.css";
-import { UIController } from "./controllers/UIController.js";
-import { TaskService } from "./services/TaskService.js";
-import { LocalStorageTaskRepository } from "./repositories/LocalStorageTaskRepository.js";
+import './style.css';
+import { UIController } from './controllers/UIController.js';
+import { TaskService } from './services/TaskService.js';
+import { LocalStorageTaskRepository } from './repositories/LocalStorageTaskRepository.js';
 
 /**
  * Application configuration interface
@@ -40,32 +40,32 @@ export class App {
    */
   async init(): Promise<void> {
     if (this.isInitialized) {
-      this.log("Application is already initialized", "warn");
+      this.log('Application is already initialized', 'warn');
       return;
     }
 
     try {
-      this.log("Starting application initialization...");
+      this.log('Starting application initialization...');
 
       // Validate DOM requirements before initialization
       this.validateDOMRequirements();
 
       // Initialize data layer
       this.repository = new LocalStorageTaskRepository();
-      this.log("Repository initialized");
+      this.log('Repository initialized');
 
       // Initialize service layer
       this.taskService = new TaskService(this.repository);
-      this.log("Task service initialized");
+      this.log('Task service initialized');
 
       // Initialize presentation layer
       this.uiController = new UIController();
-      this.log("UI controller initialized");
+      this.log('UI controller initialized');
 
       this.isInitialized = true;
-      this.log("Application initialized successfully");
+      this.log('Application initialized successfully');
     } catch (error) {
-      this.log(`Failed to initialize application: ${error}`, "error");
+      this.log(`Failed to initialize application: ${error}`, 'error');
       this.showInitializationError();
       throw error;
     }
@@ -76,19 +76,19 @@ export class App {
    */
   private validateDOMRequirements(): void {
     const requiredElements = [
-      "task-list",
-      "add-task-form",
-      "new-task-input",
-      "error-message",
+      'task-list',
+      'add-task-form',
+      'new-task-input',
+      'error-message',
     ];
 
     const missingElements = requiredElements.filter(
-      (id) => !document.getElementById(id)
+      id => !document.getElementById(id)
     );
 
     if (missingElements.length > 0) {
       throw new Error(
-        `Missing required DOM elements: ${missingElements.join(", ")}`
+        `Missing required DOM elements: ${missingElements.join(', ')}`
       );
     }
   }
@@ -101,18 +101,18 @@ export class App {
     this.taskService = null;
     this.repository = null;
     this.isInitialized = false;
-    this.log("Application state reset");
+    this.log('Application state reset');
   }
 
   /**
    * Show initialization error to user
    */
   private showInitializationError(): void {
-    const errorElement = document.getElementById("error-message");
+    const errorElement = document.getElementById('error-message');
     if (errorElement) {
       errorElement.textContent =
-        "アプリケーションの初期化に失敗しました。ページを再読み込みしてください。";
-      errorElement.style.display = "block";
+        'アプリケーションの初期化に失敗しました。ページを再読み込みしてください。';
+      errorElement.style.display = 'block';
 
       // Auto-hide error after configured duration
       if (
@@ -120,7 +120,7 @@ export class App {
         this.config.errorDisplayDuration > 0
       ) {
         setTimeout(() => {
-          errorElement.style.display = "none";
+          errorElement.style.display = 'none';
         }, this.config.errorDisplayDuration);
       }
     }
@@ -129,7 +129,7 @@ export class App {
   /**
    * Logging utility with configurable levels
    */
-  private log(message: string, level: "log" | "warn" | "error" = "log"): void {
+  private log(message: string, level: 'log' | 'warn' | 'error' = 'log'): void {
     if (this.config.enableLogging) {
       console[level](`[TodoApp] ${message}`);
     }
@@ -182,7 +182,7 @@ async function bootstrap(): Promise<App> {
     await app.init();
     return app;
   } catch (error) {
-    console.error("Application startup failed:", error);
+    console.error('Application startup failed:', error);
     throw error;
   }
 }
@@ -191,12 +191,12 @@ async function bootstrap(): Promise<App> {
  * Main entry point - initialize the application when DOM is ready
  */
 function main(): void {
-  document.addEventListener("DOMContentLoaded", async () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     try {
       await bootstrap();
     } catch (error) {
       // Error is already logged in bootstrap, just ensure it doesn't crash the page
-      console.error("Failed to start application:", error);
+      console.error('Failed to start application:', error);
     }
   });
 }

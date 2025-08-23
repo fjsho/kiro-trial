@@ -3,10 +3,10 @@
  * Tests the complete application startup process from main.ts entry point
  */
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the UIController to test initialization
-vi.mock("../controllers/UIController.js", () => {
+vi.mock('../controllers/UIController.js', () => {
   return {
     UIController: vi.fn().mockImplementation(() => {
       return {
@@ -18,10 +18,10 @@ vi.mock("../controllers/UIController.js", () => {
   };
 });
 
-import { App } from "../main.js";
-import { UIController } from "../controllers/UIController.js";
+import { App } from '../main.js';
+import { UIController } from '../controllers/UIController.js';
 
-describe("Application Initialization Integration Tests", () => {
+describe('Application Initialization Integration Tests', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     vi.clearAllMocks();
@@ -53,7 +53,7 @@ describe("Application Initialization Integration Tests", () => {
     `;
   });
 
-  it("should initialize the App class successfully", async () => {
+  it('should initialize the App class successfully', async () => {
     const app = new App();
 
     // Verify initial state
@@ -71,7 +71,7 @@ describe("Application Initialization Integration Tests", () => {
     expect(app.getTaskService()).not.toBeNull();
   });
 
-  it("should prevent multiple initializations", async () => {
+  it('should prevent multiple initializations', async () => {
     const app = new App();
 
     // Initialize twice
@@ -83,31 +83,31 @@ describe("Application Initialization Integration Tests", () => {
     expect(app.getIsInitialized()).toBe(true);
   });
 
-  it("should handle initialization errors gracefully", async () => {
+  it('should handle initialization errors gracefully', async () => {
     // Mock UIController to throw an error
     vi.mocked(UIController).mockImplementationOnce(() => {
-      throw new Error("Initialization failed");
+      throw new Error('Initialization failed');
     });
 
     // Mock console.error to verify error handling
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const app = new App();
 
     // Expect initialization to throw
-    await expect(app.init()).rejects.toThrow("Initialization failed");
+    await expect(app.init()).rejects.toThrow('Initialization failed');
 
     // Verify error was logged
     expect(consoleSpy).toHaveBeenCalledWith(
-      "[TodoApp] Failed to initialize application: Error: Initialization failed"
+      '[TodoApp] Failed to initialize application: Error: Initialization failed'
     );
 
     // Verify error message is displayed
-    const errorElement = document.getElementById("error-message");
+    const errorElement = document.getElementById('error-message');
     expect(errorElement?.textContent).toBe(
-      "アプリケーションの初期化に失敗しました。ページを再読み込みしてください。"
+      'アプリケーションの初期化に失敗しました。ページを再読み込みしてください。'
     );
-    expect(errorElement?.style.display).toBe("block");
+    expect(errorElement?.style.display).toBe('block');
 
     // Verify app state remains uninitialized
     expect(app.getIsInitialized()).toBe(false);
@@ -115,7 +115,7 @@ describe("Application Initialization Integration Tests", () => {
     consoleSpy.mockRestore();
   });
 
-  it("should reset application state properly", async () => {
+  it('should reset application state properly', async () => {
     const app = new App();
 
     // Initialize the app
@@ -131,7 +131,7 @@ describe("Application Initialization Integration Tests", () => {
     expect(app.getTaskService()).toBeNull();
   });
 
-  it("should initialize with proper dependency injection", async () => {
+  it('should initialize with proper dependency injection', async () => {
     const app = new App();
 
     await app.init();
@@ -144,12 +144,12 @@ describe("Application Initialization Integration Tests", () => {
     expect(UIController).toHaveBeenCalledTimes(1);
   });
 
-  it("should verify required DOM elements exist", () => {
+  it('should verify required DOM elements exist', () => {
     // Verify required DOM elements exist for initialization
-    expect(document.getElementById("task-list")).toBeTruthy();
-    expect(document.getElementById("add-task-form")).toBeTruthy();
-    expect(document.getElementById("new-task-input")).toBeTruthy();
-    expect(document.getElementById("stats-text")).toBeTruthy();
-    expect(document.getElementById("error-message")).toBeTruthy();
+    expect(document.getElementById('task-list')).toBeTruthy();
+    expect(document.getElementById('add-task-form')).toBeTruthy();
+    expect(document.getElementById('new-task-input')).toBeTruthy();
+    expect(document.getElementById('stats-text')).toBeTruthy();
+    expect(document.getElementById('error-message')).toBeTruthy();
   });
 });

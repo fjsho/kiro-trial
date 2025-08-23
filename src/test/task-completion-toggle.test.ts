@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { screen, fireEvent } from "@testing-library/dom";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach } from 'vitest';
+import { screen, fireEvent } from '@testing-library/dom';
+import { UIController } from '../controllers/UIController.js';
 
-describe("Task Completion Toggle E2E", () => {
+describe('Task Completion Toggle E2E', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
@@ -39,79 +39,79 @@ describe("Task Completion Toggle E2E", () => {
     new UIController();
   });
 
-  it("should toggle task completion state when checkbox is clicked", async () => {
+  it('should toggle task completion state when checkbox is clicked', async () => {
     // Arrange - Add a task first
-    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
-    const taskList = document.getElementById("task-list")!;
+    const taskInput = screen.getByRole('textbox') as HTMLInputElement;
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
+    const taskList = document.getElementById('task-list')!;
 
-    const taskText = "完了状態切り替えテスト";
+    const taskText = '完了状態切り替えテスト';
 
     // Add a task
     fireEvent.change(taskInput, { target: { value: taskText } });
     fireEvent.submit(form);
 
     // Wait for async operation to complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Get the added task
-    const taskItems = taskList.querySelectorAll(".task-item");
+    const taskItems = taskList.querySelectorAll('.task-item');
     expect(taskItems).toHaveLength(1);
 
     const taskItem = taskItems[0] as HTMLElement;
     const checkbox = taskItem.querySelector(
-      ".task-checkbox"
+      '.task-checkbox'
     ) as HTMLInputElement;
 
     // Verify initial state - task should be uncompleted
     expect(checkbox.checked).toBe(false);
-    expect(taskItem.classList.contains("completed")).toBe(false);
+    expect(taskItem.classList.contains('completed')).toBe(false);
 
     // Act - Click the checkbox to toggle completion
     fireEvent.click(checkbox);
 
     // Wait for async operation to complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Assert - Task should now be completed
     expect(checkbox.checked).toBe(true);
-    expect(taskItem.classList.contains("completed")).toBe(true);
+    expect(taskItem.classList.contains('completed')).toBe(true);
 
     // Act - Click the checkbox again to toggle back
     fireEvent.click(checkbox);
 
     // Wait for async operation to complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Assert - Task should now be uncompleted again
     expect(checkbox.checked).toBe(false);
-    expect(taskItem.classList.contains("completed")).toBe(false);
+    expect(taskItem.classList.contains('completed')).toBe(false);
   });
 
-  it("should persist task completion state to LocalStorage", async () => {
+  it('should persist task completion state to LocalStorage', async () => {
     // Arrange - Add a task first
-    const taskInput = screen.getByRole("textbox") as HTMLInputElement;
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
-    const taskList = document.getElementById("task-list")!;
+    const taskInput = screen.getByRole('textbox') as HTMLInputElement;
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
+    const taskList = document.getElementById('task-list')!;
 
-    const taskText = "永続化テストタスク";
+    const taskText = '永続化テストタスク';
 
     // Add a task
     fireEvent.change(taskInput, { target: { value: taskText } });
     fireEvent.submit(form);
 
     // Wait for async operation to complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Get the added task
-    const taskItems = taskList.querySelectorAll(".task-item");
+    const taskItems = taskList.querySelectorAll('.task-item');
     const taskItem = taskItems[0] as HTMLElement;
     const checkbox = taskItem.querySelector(
-      ".task-checkbox"
+      '.task-checkbox'
     ) as HTMLInputElement;
 
     // Verify initial state in localStorage
-    let storedTasks = JSON.parse(localStorage.getItem("todoApp_tasks") || "[]");
+    let storedTasks = JSON.parse(localStorage.getItem('todoApp_tasks') || '[]');
     expect(storedTasks).toHaveLength(1);
     expect(storedTasks[0].completed).toBe(false);
 
@@ -119,10 +119,10 @@ describe("Task Completion Toggle E2E", () => {
     fireEvent.click(checkbox);
 
     // Wait for async operation to complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Assert - Task completion should be persisted to localStorage
-    storedTasks = JSON.parse(localStorage.getItem("todoApp_tasks") || "[]");
+    storedTasks = JSON.parse(localStorage.getItem('todoApp_tasks') || '[]');
     expect(storedTasks).toHaveLength(1);
     expect(storedTasks[0].completed).toBe(true);
 
@@ -130,10 +130,10 @@ describe("Task Completion Toggle E2E", () => {
     fireEvent.click(checkbox);
 
     // Wait for async operation to complete
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Assert - Task completion should be persisted to localStorage
-    storedTasks = JSON.parse(localStorage.getItem("todoApp_tasks") || "[]");
+    storedTasks = JSON.parse(localStorage.getItem('todoApp_tasks') || '[]');
     expect(storedTasks).toHaveLength(1);
     expect(storedTasks[0].completed).toBe(false);
   });

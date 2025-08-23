@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { JSDOM } from "jsdom";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { JSDOM } from 'jsdom';
 
-describe("Task Filter - All Filter Integration Test", () => {
+describe('Task Filter - All Filter Integration Test', () => {
   let dom: JSDOM;
   let document: Document;
   let window: Window & typeof globalThis;
@@ -78,7 +78,7 @@ describe("Task Filter - All Filter Integration Test", () => {
         </body>
       </html>
     `,
-      { url: "http://localhost" }
+      { url: 'http://localhost' }
     );
 
     document = dom.window.document;
@@ -109,20 +109,20 @@ describe("Task Filter - All Filter Integration Test", () => {
 
   it('should display all tasks when "all" filter is clicked', async () => {
     // Import modules after DOM setup
-    const { TaskModel } = await import("../models/Task");
+    const { TaskModel } = await import('../models/Task');
 
     // Setup test data - mix of completed and active tasks
     const testTasks = [
-      new TaskModel("1", "Active Task 1", false, new Date()),
-      new TaskModel("2", "Completed Task 1", true, new Date()),
-      new TaskModel("3", "Active Task 2", false, new Date()),
-      new TaskModel("4", "Completed Task 2", true, new Date()),
+      new TaskModel('1', 'Active Task 1', false, new Date()),
+      new TaskModel('2', 'Completed Task 1', true, new Date()),
+      new TaskModel('3', 'Active Task 2', false, new Date()),
+      new TaskModel('4', 'Completed Task 2', true, new Date()),
     ];
 
     // Mock localStorage to return test tasks
     const mockGetItem = vi.fn().mockReturnValue(
       JSON.stringify(
-        testTasks.map((task) => ({
+        testTasks.map(task => ({
           id: task.id,
           text: task.text,
           completed: task.completed,
@@ -133,12 +133,12 @@ describe("Task Filter - All Filter Integration Test", () => {
     global.localStorage.getItem = mockGetItem;
 
     // Initialize UIController which should handle filter functionality
-    const { UIController } = await import("../controllers/UIController");
+    const { UIController } = await import('../controllers/UIController');
     const uiController = new UIController();
 
     // Get the "all" filter button
     const allFilterButton = document.getElementById(
-      "filter-all"
+      'filter-all'
     ) as HTMLButtonElement;
     expect(allFilterButton).toBeTruthy();
 

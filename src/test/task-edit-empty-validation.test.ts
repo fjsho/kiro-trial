@@ -7,8 +7,8 @@
  * Requirements: 4.4 - IF 編集後のテキストが空の場合 THEN システムは変更を破棄し元のテキストを保持する
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -27,11 +27,11 @@ const localStorageMock = (() => {
   };
 })();
 
-Object.defineProperty(window, "localStorage", {
+Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-describe("Task Edit Empty Validation - Integration Test", () => {
+describe('Task Edit Empty Validation - Integration Test', () => {
   let container: HTMLElement;
   let uiController: UIController;
 
@@ -66,159 +66,159 @@ describe("Task Edit Empty Validation - Integration Test", () => {
       </div>
     `;
 
-    container = document.getElementById("app")!;
+    container = document.getElementById('app')!;
     uiController = new UIController();
   });
 
-  it("should discard changes when saving with empty text via Enter key", async () => {
+  it('should discard changes when saving with empty text via Enter key', async () => {
     // Add a task first
     const taskInput = document.getElementById(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
-    taskInput.value = "Original Task Text";
+    taskInput.value = 'Original Task Text';
 
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
-    form.dispatchEvent(new Event("submit"));
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Find the task text element
-    const taskText = document.querySelector(".task-text") as HTMLElement;
+    const taskText = document.querySelector('.task-text') as HTMLElement;
     expect(taskText).toBeTruthy();
-    expect(taskText.textContent).toBe("Original Task Text");
+    expect(taskText.textContent).toBe('Original Task Text');
 
     // Double-click to enter edit mode
-    taskText.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    taskText.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
 
     // Find the edit input
     const editInput = document.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
     expect(editInput).toBeTruthy();
-    expect(editInput.value).toBe("Original Task Text");
+    expect(editInput.value).toBe('Original Task Text');
 
     // Clear the input (empty text)
-    editInput.value = "";
+    editInput.value = '';
 
     // Press Enter to save
-    const enterEvent = new KeyboardEvent("keydown", {
-      key: "Enter",
+    const enterEvent = new KeyboardEvent('keydown', {
+      key: 'Enter',
       bubbles: true,
     });
     editInput.dispatchEvent(enterEvent);
 
     // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Verify that the original text is preserved
-    const updatedTaskText = document.querySelector(".task-text") as HTMLElement;
-    expect(updatedTaskText.textContent).toBe("Original Task Text");
+    const updatedTaskText = document.querySelector('.task-text') as HTMLElement;
+    expect(updatedTaskText.textContent).toBe('Original Task Text');
 
     // Verify that edit mode is exited
-    const editInputAfter = document.querySelector(".task-edit-input");
+    const editInputAfter = document.querySelector('.task-edit-input');
     expect(editInputAfter).toBeNull();
 
     // Verify that task text is visible again
-    expect(updatedTaskText.style.display).toBe("");
+    expect(updatedTaskText.style.display).toBe('');
   });
 
-  it("should discard changes when saving with empty text via blur event", async () => {
+  it('should discard changes when saving with empty text via blur event', async () => {
     // Add a task first
     const taskInput = document.getElementById(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
-    taskInput.value = "Another Original Text";
+    taskInput.value = 'Another Original Text';
 
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
-    form.dispatchEvent(new Event("submit"));
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Find the task text element
-    const taskText = document.querySelector(".task-text") as HTMLElement;
+    const taskText = document.querySelector('.task-text') as HTMLElement;
     expect(taskText).toBeTruthy();
-    expect(taskText.textContent).toBe("Another Original Text");
+    expect(taskText.textContent).toBe('Another Original Text');
 
     // Double-click to enter edit mode
-    taskText.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    taskText.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
 
     // Find the edit input
     const editInput = document.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
     expect(editInput).toBeTruthy();
-    expect(editInput.value).toBe("Another Original Text");
+    expect(editInput.value).toBe('Another Original Text');
 
     // Clear the input (empty text)
-    editInput.value = "";
+    editInput.value = '';
 
     // Trigger blur event to save
-    editInput.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
+    editInput.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
 
     // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Verify that the original text is preserved
-    const updatedTaskText = document.querySelector(".task-text") as HTMLElement;
-    expect(updatedTaskText.textContent).toBe("Another Original Text");
+    const updatedTaskText = document.querySelector('.task-text') as HTMLElement;
+    expect(updatedTaskText.textContent).toBe('Another Original Text');
 
     // Verify that edit mode is exited
-    const editInputAfter = document.querySelector(".task-edit-input");
+    const editInputAfter = document.querySelector('.task-edit-input');
     expect(editInputAfter).toBeNull();
 
     // Verify that task text is visible again
-    expect(updatedTaskText.style.display).toBe("");
+    expect(updatedTaskText.style.display).toBe('');
   });
 
-  it("should discard changes when saving with whitespace-only text", async () => {
+  it('should discard changes when saving with whitespace-only text', async () => {
     // Add a task first
     const taskInput = document.getElementById(
-      "new-task-input"
+      'new-task-input'
     ) as HTMLInputElement;
-    taskInput.value = "Whitespace Test Task";
+    taskInput.value = 'Whitespace Test Task';
 
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
-    form.dispatchEvent(new Event("submit"));
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
+    form.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Find the task text element
-    const taskText = document.querySelector(".task-text") as HTMLElement;
+    const taskText = document.querySelector('.task-text') as HTMLElement;
     expect(taskText).toBeTruthy();
-    expect(taskText.textContent).toBe("Whitespace Test Task");
+    expect(taskText.textContent).toBe('Whitespace Test Task');
 
     // Double-click to enter edit mode
-    taskText.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    taskText.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
 
     // Find the edit input
     const editInput = document.querySelector(
-      ".task-edit-input"
+      '.task-edit-input'
     ) as HTMLInputElement;
     expect(editInput).toBeTruthy();
-    expect(editInput.value).toBe("Whitespace Test Task");
+    expect(editInput.value).toBe('Whitespace Test Task');
 
     // Set input to whitespace-only text
-    editInput.value = "   \t\n   ";
+    editInput.value = '   \t\n   ';
 
     // Press Enter to save
-    const enterEvent = new KeyboardEvent("keydown", {
-      key: "Enter",
+    const enterEvent = new KeyboardEvent('keydown', {
+      key: 'Enter',
       bubbles: true,
     });
     editInput.dispatchEvent(enterEvent);
 
     // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Verify that the original text is preserved
-    const updatedTaskText = document.querySelector(".task-text") as HTMLElement;
-    expect(updatedTaskText.textContent).toBe("Whitespace Test Task");
+    const updatedTaskText = document.querySelector('.task-text') as HTMLElement;
+    expect(updatedTaskText.textContent).toBe('Whitespace Test Task');
 
     // Verify that edit mode is exited
-    const editInputAfter = document.querySelector(".task-edit-input");
+    const editInputAfter = document.querySelector('.task-edit-input');
     expect(editInputAfter).toBeNull();
   });
 });

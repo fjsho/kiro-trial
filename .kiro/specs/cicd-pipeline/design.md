@@ -141,7 +141,7 @@ interface EnvironmentVariables {
   CLOUDFRONT_DISTRIBUTION_ID: string;
 
   // アプリケーション設定
-  NODE_ENV: "development" | "production";
+  NODE_ENV: 'development' | 'production';
   VITE_APP_VERSION: string;
 }
 ```
@@ -151,14 +151,14 @@ interface EnvironmentVariables {
 ```typescript
 interface BuildArtifacts {
   // 静的ファイル
-  "index.html": string;
-  "assets/": {
-    "index-[hash].js": string;
-    "index-[hash].css": string;
+  'index.html': string;
+  'assets/': {
+    'index-[hash].js': string;
+    'index-[hash].css': string;
   };
   // メタデータ
-  "manifest.json"?: string;
-  "robots.txt"?: string;
+  'manifest.json'?: string;
+  'robots.txt'?: string;
 }
 ```
 

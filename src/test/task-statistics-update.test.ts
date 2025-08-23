@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { UIController } from "../controllers/UIController.js";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UIController } from '../controllers/UIController.js';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -19,11 +19,11 @@ const localStorageMock = (() => {
   };
 })();
 
-Object.defineProperty(window, "localStorage", {
+Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-describe("Task Statistics Update Integration Tests", () => {
+describe('Task Statistics Update Integration Tests', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe("Task Statistics Update Integration Tests", () => {
       </div>
     `;
 
-    container = document.getElementById("app")!;
+    container = document.getElementById('app')!;
   });
 
   it("should display initial statistics as '0 個中 0 個完了' when no tasks exist", async () => {
@@ -76,10 +76,10 @@ describe("Task Statistics Update Integration Tests", () => {
     new UIController();
 
     // Wait for initial load
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-    const statsText = document.getElementById("stats-text");
-    expect(statsText?.textContent).toBe("0 個中 0 個完了");
+    const statsText = document.getElementById('stats-text');
+    expect(statsText?.textContent).toBe('0 個中 0 個完了');
   });
 
   it("should update statistics to '1 個中 0 個完了' when one task is added", async () => {
@@ -87,17 +87,17 @@ describe("Task Statistics Update Integration Tests", () => {
     new UIController();
 
     // Add a task
-    const input = document.getElementById("new-task-input") as HTMLInputElement;
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const input = document.getElementById('new-task-input') as HTMLInputElement;
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
 
-    input.value = "Test task";
-    form.dispatchEvent(new Event("submit"));
+    input.value = 'Test task';
+    form.dispatchEvent(new Event('submit'));
 
     // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-    const statsText = document.getElementById("stats-text");
-    expect(statsText?.textContent).toBe("1 個中 0 個完了");
+    const statsText = document.getElementById('stats-text');
+    expect(statsText?.textContent).toBe('1 個中 0 個完了');
   });
 
   it("should update statistics to '1 個中 1 個完了' when one task is completed", async () => {
@@ -105,29 +105,29 @@ describe("Task Statistics Update Integration Tests", () => {
     new UIController();
 
     // Add a task
-    const input = document.getElementById("new-task-input") as HTMLInputElement;
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const input = document.getElementById('new-task-input') as HTMLInputElement;
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
 
-    input.value = "Test task";
-    form.dispatchEvent(new Event("submit"));
+    input.value = 'Test task';
+    form.dispatchEvent(new Event('submit'));
 
     // Wait for task to be added
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Complete the task
     const checkbox = document.querySelector(
-      ".task-checkbox"
+      '.task-checkbox'
     ) as HTMLInputElement;
     expect(checkbox).toBeTruthy();
 
     checkbox.checked = true;
-    checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
 
     // Wait for async operations
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-    const statsText = document.getElementById("stats-text");
-    expect(statsText?.textContent).toBe("1 個中 1 個完了");
+    const statsText = document.getElementById('stats-text');
+    expect(statsText?.textContent).toBe('1 個中 1 個完了');
   });
 
   it("should update statistics to '2 個中 1 個完了' when second task is added", async () => {
@@ -135,58 +135,58 @@ describe("Task Statistics Update Integration Tests", () => {
     new UIController();
 
     // Add first task and complete it
-    const input = document.getElementById("new-task-input") as HTMLInputElement;
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const input = document.getElementById('new-task-input') as HTMLInputElement;
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
 
-    input.value = "First task";
-    form.dispatchEvent(new Event("submit"));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    input.value = 'First task';
+    form.dispatchEvent(new Event('submit'));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     const firstCheckbox = document.querySelector(
-      ".task-checkbox"
+      '.task-checkbox'
     ) as HTMLInputElement;
     firstCheckbox.checked = true;
-    firstCheckbox.dispatchEvent(new Event("change", { bubbles: true }));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    firstCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Add second task
-    input.value = "Second task";
-    form.dispatchEvent(new Event("submit"));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    input.value = 'Second task';
+    form.dispatchEvent(new Event('submit'));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-    const statsText = document.getElementById("stats-text");
-    expect(statsText?.textContent).toBe("2 個中 1 個完了");
+    const statsText = document.getElementById('stats-text');
+    expect(statsText?.textContent).toBe('2 個中 1 個完了');
   });
 
-  it("should update statistics when task completion status is toggled", async () => {
+  it('should update statistics when task completion status is toggled', async () => {
     // Initialize UIController
     new UIController();
 
     // Add a task
-    const input = document.getElementById("new-task-input") as HTMLInputElement;
-    const form = document.getElementById("add-task-form") as HTMLFormElement;
+    const input = document.getElementById('new-task-input') as HTMLInputElement;
+    const form = document.getElementById('add-task-form') as HTMLFormElement;
 
-    input.value = "Toggle task";
-    form.dispatchEvent(new Event("submit"));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    input.value = 'Toggle task';
+    form.dispatchEvent(new Event('submit'));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     // Complete the task
     const checkbox = document.querySelector(
-      ".task-checkbox"
+      '.task-checkbox'
     ) as HTMLInputElement;
     checkbox.checked = true;
-    checkbox.dispatchEvent(new Event("change", { bubbles: true }));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-    let statsText = document.getElementById("stats-text");
-    expect(statsText?.textContent).toBe("1 個中 1 個完了");
+    let statsText = document.getElementById('stats-text');
+    expect(statsText?.textContent).toBe('1 個中 1 個完了');
 
     // Uncomplete the task
     checkbox.checked = false;
-    checkbox.dispatchEvent(new Event("change", { bubbles: true }));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+    await new Promise(resolve => setTimeout(resolve, 0));
 
-    statsText = document.getElementById("stats-text");
-    expect(statsText?.textContent).toBe("1 個中 0 個完了");
+    statsText = document.getElementById('stats-text');
+    expect(statsText?.textContent).toBe('1 個中 0 個完了');
   });
 });

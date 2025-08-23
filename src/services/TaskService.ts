@@ -1,9 +1,9 @@
-import type { Task } from "../models/Task.js";
-import { TaskModel } from "../models/Task.js";
-import type { TaskRepository } from "../repositories/TaskRepository.js";
-import { generateTaskId } from "../utils/idGenerator.js";
+import type { Task } from '../models/Task.js';
+import { TaskModel } from '../models/Task.js';
+import type { TaskRepository } from '../repositories/TaskRepository.js';
+import { generateTaskId } from '../utils/idGenerator.js';
 
-export type FilterType = "all" | "active" | "completed";
+export type FilterType = 'all' | 'active' | 'completed';
 
 /**
  * Interface representing task statistics
@@ -34,10 +34,10 @@ export class TaskService {
   }
 
   private validateTaskText(text: string): void {
-    const trimmedText = text?.trim() || "";
+    const trimmedText = text?.trim() || '';
 
     if (trimmedText.length < TASK_VALIDATION.MIN_LENGTH) {
-      throw new Error("Task text cannot be empty");
+      throw new Error('Task text cannot be empty');
     }
 
     if (text.length > TASK_VALIDATION.MAX_LENGTH) {
@@ -52,8 +52,8 @@ export class TaskService {
   }
 
   async deleteTask(id: string): Promise<void> {
-    if (!id || typeof id !== "string") {
-      throw new Error("Task ID is required and must be a string");
+    if (!id || typeof id !== 'string') {
+      throw new Error('Task ID is required and must be a string');
     }
 
     await this.repository.deleteTask(id);
@@ -61,7 +61,7 @@ export class TaskService {
 
   async toggleTask(id: string): Promise<Task> {
     const tasks = await this.repository.getTasks();
-    const task = tasks.find((t) => t.id === id);
+    const task = tasks.find(t => t.id === id);
 
     if (!task) {
       throw new Error(`Task with id ${id} not found`);
@@ -78,11 +78,11 @@ export class TaskService {
     const tasks = await this.getTasks();
 
     switch (filter) {
-      case "active":
-        return tasks.filter((task) => !task.completed);
-      case "completed":
-        return tasks.filter((task) => task.completed);
-      case "all":
+      case 'active':
+        return tasks.filter(task => !task.completed);
+      case 'completed':
+        return tasks.filter(task => task.completed);
+      case 'all':
       default:
         return tasks;
     }
@@ -96,7 +96,7 @@ export class TaskService {
    */
   async getTaskStats(): Promise<TaskStats> {
     const tasks = await this.getTasks();
-    const completed = tasks.filter((task) => task.completed).length;
+    const completed = tasks.filter(task => task.completed).length;
     const total = tasks.length;
     const active = total - completed;
 
