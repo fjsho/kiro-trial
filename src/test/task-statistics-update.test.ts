@@ -24,8 +24,6 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Statistics Update Integration Tests', () => {
-  let _container: HTMLElement;
-
   beforeEach(() => {
     // Clear localStorage
     localStorage.clear();
@@ -67,8 +65,6 @@ describe('Task Statistics Update Integration Tests', () => {
         </main>
       </div>
     `;
-
-    _container = document.getElementById('app')!;
   });
 
   it("should display initial statistics as '0 個中 0 個完了' when no tasks exist", async () => {

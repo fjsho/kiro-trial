@@ -4,7 +4,6 @@ import { TaskService } from '../services/TaskService';
 import { LocalStorageTaskRepository } from '../repositories/LocalStorageTaskRepository';
 
 describe('Task Edit Persistence Integration Test', () => {
-  let _uiController: UIController;
   let taskService: TaskService;
   let repository: LocalStorageTaskRepository;
 
@@ -108,7 +107,7 @@ describe('Task Edit Persistence Integration Test', () => {
     setupDOM();
     repository = new LocalStorageTaskRepository();
     taskService = new TaskService(repository);
-    _uiController = new UIController();
+    void new UIController();
   });
 
   it('should persist edited task content to LocalStorage when saving with Enter key', async () => {

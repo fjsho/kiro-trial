@@ -22,8 +22,6 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Deletion Integration Tests', () => {
-  let _container: HTMLElement;
-
   beforeEach(() => {
     // Reset localStorage mock
     vi.clearAllMocks();
@@ -73,7 +71,7 @@ describe('Task Deletion Integration Tests', () => {
 
   it('should delete task when delete button is clicked', async () => {
     // Initialize UIController
-    const _uiController = new UIController();
+    void new UIController();
 
     // Add a task first
     const taskInput = document.getElementById(
@@ -118,7 +116,7 @@ describe('Task Deletion Integration Tests', () => {
 
   it('should delete the correct task when multiple tasks exist', async () => {
     // Initialize UIController
-    const _uiController = new UIController();
+    void new UIController();
 
     // Add multiple tasks
     const taskInput = document.getElementById(

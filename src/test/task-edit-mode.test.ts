@@ -87,8 +87,6 @@ function setupDOM(): void {
 }
 
 describe('Task Edit Mode - Double Click Integration', () => {
-  let _uiController: UIController;
-
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
@@ -97,7 +95,7 @@ describe('Task Edit Mode - Double Click Integration', () => {
     setupDOM();
 
     // Initialize UIController
-    _uiController = new UIController();
+    void new UIController();
   });
 
   it('should enter edit mode when task text is double-clicked', async () => {

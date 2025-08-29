@@ -22,8 +22,6 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Deletion Statistics Integration Tests', () => {
-  let _container: HTMLElement;
-
   beforeEach(() => {
     // Reset localStorage mock
     vi.clearAllMocks();

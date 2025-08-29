@@ -2,8 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { UIController } from '../controllers/UIController';
 
 describe('Task Edit - Enter Key Save (Integration)', () => {
-  let _uiController: UIController;
-
   beforeEach(() => {
     // Setup DOM
     document.body.innerHTML = `
@@ -30,7 +28,7 @@ describe('Task Edit - Enter Key Save (Integration)', () => {
     localStorage.clear();
 
     // Initialize UIController (which creates its own TaskService)
-    _uiController = new UIController();
+    void new UIController();
   });
 
   it('should save edited task content when Enter key is pressed', async () => {

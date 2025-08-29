@@ -23,8 +23,6 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Filter Button States Integration Tests', () => {
-  let _uiController: UIController;
-
   beforeEach(() => {
     // Reset localStorage mock
     localStorageMock.clear();
@@ -99,7 +97,7 @@ describe('Filter Button States Integration Tests', () => {
     `;
 
     // Initialize UIController
-    _uiController = new UIController();
+    void new UIController();
   });
 
   describe('Filter Button Active State Management', () => {

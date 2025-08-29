@@ -6,7 +6,6 @@ import { UIController } from '../controllers/UIController';
 describe('Task Persistence - Page Reload', () => {
   let taskService: TaskService;
   let repository: LocalStorageTaskRepository;
-  let _uiController: UIController;
 
   beforeEach(() => {
     // Clear localStorage before each test
@@ -34,7 +33,7 @@ describe('Task Persistence - Page Reload', () => {
       </div>
     `;
 
-    _uiController = new UIController();
+    void new UIController();
   });
 
   it('should persist tasks after page reload simulation', async () => {
@@ -53,7 +52,7 @@ describe('Task Persistence - Page Reload', () => {
     // Simulate page reload by creating new instances
     const newRepository = new LocalStorageTaskRepository();
     const newTaskService = new TaskService(newRepository);
-    const _newUIController = new UIController();
+    void new UIController();
 
     // Initialize the new "session" - this should load data from localStorage
     const loadedTasks = await newTaskService.getTasks();
@@ -103,9 +102,9 @@ describe('Task Persistence - Page Reload', () => {
 
   it('should preserve task order after reload', async () => {
     // Add tasks in specific order
-    const _task1 = await taskService.addTask('First Task');
-    const _task2 = await taskService.addTask('Second Task');
-    const _task3 = await taskService.addTask('Third Task');
+    void (await taskService.addTask('First Task'));
+    void (await taskService.addTask('Second Task'));
+    void (await taskService.addTask('Third Task'));
 
     // Simulate reload
     const newRepository = new LocalStorageTaskRepository();
