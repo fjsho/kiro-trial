@@ -9,7 +9,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { UIController } from '../controllers/UIController.js';
 
 describe('LocalStorage Error Handling Integration Tests', () => {
-  let container: HTMLElement;
+  let _container: HTMLElement;
   let originalLocalStorage: Storage;
 
   beforeEach(() => {
@@ -91,7 +91,7 @@ describe('LocalStorage Error Handling Integration Tests', () => {
       </div>
     `;
 
-    container = document.getElementById('app')!;
+    _container = document.getElementById('app')!;
 
     // LocalStorage の元の実装を保存
     originalLocalStorage = window.localStorage;
@@ -134,7 +134,7 @@ describe('LocalStorage Error Handling Integration Tests', () => {
       });
 
       // UIController を初期化
-      const uiController = new UIController();
+      const _uiController = new UIController();
 
       // タスク追加を試行
       const taskInput = document.getElementById(

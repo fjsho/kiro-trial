@@ -22,7 +22,7 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Deletion Integration Tests', () => {
-  let container: HTMLElement;
+  let _container: HTMLElement;
 
   beforeEach(() => {
     // Reset localStorage mock
@@ -68,12 +68,12 @@ describe('Task Deletion Integration Tests', () => {
       </div>
     `;
 
-    container = document.getElementById('app')!;
+    _container = document.getElementById('app')!;
   });
 
   it('should delete task when delete button is clicked', async () => {
     // Initialize UIController
-    const uiController = new UIController();
+    const _uiController = new UIController();
 
     // Add a task first
     const taskInput = document.getElementById(
@@ -118,7 +118,7 @@ describe('Task Deletion Integration Tests', () => {
 
   it('should delete the correct task when multiple tasks exist', async () => {
     // Initialize UIController
-    const uiController = new UIController();
+    const _uiController = new UIController();
 
     // Add multiple tasks
     const taskInput = document.getElementById(

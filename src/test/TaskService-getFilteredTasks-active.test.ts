@@ -15,9 +15,9 @@ describe('TaskService.getFilteredTasks("active") - Unit Test', () => {
 
   it('should return only active (incomplete) tasks when filter is "active"', async () => {
     // Add tasks with mixed completion status
-    const task1 = await taskService.addTask('Active Task 1');
+    const _task1 = await taskService.addTask('Active Task 1');
     const task2 = await taskService.addTask('Completed Task');
-    const task3 = await taskService.addTask('Active Task 2');
+    const _task3 = await taskService.addTask('Active Task 2');
 
     // Complete one task
     await taskService.toggleTask(task2.id);
@@ -54,9 +54,9 @@ describe('TaskService.getFilteredTasks("active") - Unit Test', () => {
 
   it('should return all tasks when all tasks are active', async () => {
     // Add multiple active tasks
-    const task1 = await taskService.addTask('Active Task 1');
-    const task2 = await taskService.addTask('Active Task 2');
-    const task3 = await taskService.addTask('Active Task 3');
+    const _task1 = await taskService.addTask('Active Task 1');
+    const _task2 = await taskService.addTask('Active Task 2');
+    const _task3 = await taskService.addTask('Active Task 3');
 
     // Get filtered tasks
     const activeTasks = await taskService.getFilteredTasks('active');
@@ -100,7 +100,7 @@ describe('TaskService.getFilteredTasks("active") - Unit Test', () => {
 
   it('should not modify original tasks when filtering', async () => {
     // Add tasks
-    const task1 = await taskService.addTask('Task 1');
+    const _task1 = await taskService.addTask('Task 1');
     const task2 = await taskService.addTask('Task 2');
 
     // Complete one task
@@ -110,7 +110,7 @@ describe('TaskService.getFilteredTasks("active") - Unit Test', () => {
     const allTasksBefore = await taskService.getTasks();
 
     // Get filtered tasks
-    const activeTasks = await taskService.getFilteredTasks('active');
+    const _activeTasks = await taskService.getFilteredTasks('active');
 
     // Get all tasks after filtering
     const allTasksAfter = await taskService.getTasks();

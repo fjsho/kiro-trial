@@ -5,7 +5,7 @@ import { UIController } from '../controllers/UIController';
 
 describe('Task Edit - Blur Save Integration Test', () => {
   let taskService: TaskService;
-  let uiController: UIController;
+  let _uiController: UIController;
   let repository: LocalStorageTaskRepository;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('Task Edit - Blur Save Integration Test', () => {
 
     repository = new LocalStorageTaskRepository();
     taskService = new TaskService(repository);
-    uiController = new UIController();
+    _uiController = new UIController();
   });
 
   it('should save task edit when input loses focus (blur)', async () => {

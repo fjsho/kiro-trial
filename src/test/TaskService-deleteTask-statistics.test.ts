@@ -21,7 +21,7 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting an incomplete task', async () => {
     // Arrange - Initial state: 3 tasks, 1 completed
-    const initialTasks = [
+    const _initialTasks = [
       new TaskModel('1', 'Task 1', false), // incomplete - will be deleted
       new TaskModel('2', 'Task 2', true), // completed
       new TaskModel('3', 'Task 3', false), // incomplete
@@ -51,7 +51,7 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting a completed task', async () => {
     // Arrange - Initial state: 3 tasks, 2 completed
-    const initialTasks = [
+    const _initialTasks = [
       new TaskModel('1', 'Task 1', true), // completed - will be deleted
       new TaskModel('2', 'Task 2', true), // completed
       new TaskModel('3', 'Task 3', false), // incomplete
@@ -81,7 +81,7 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting the last task', async () => {
     // Arrange - Initial state: 1 task
-    const initialTasks = [
+    const _initialTasks = [
       new TaskModel('1', 'Last task', false), // will be deleted
     ];
 
@@ -106,7 +106,7 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting one of many completed tasks', async () => {
     // Arrange - Initial state: 5 tasks, 3 completed
-    const initialTasks = [
+    const _initialTasks = [
       new TaskModel('1', 'Task 1', true), // completed - will be deleted
       new TaskModel('2', 'Task 2', true), // completed
       new TaskModel('3', 'Task 3', false), // incomplete
@@ -140,7 +140,7 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting one of many incomplete tasks', async () => {
     // Arrange - Initial state: 5 tasks, 2 completed
-    const initialTasks = [
+    const _initialTasks = [
       new TaskModel('1', 'Task 1', false), // incomplete - will be deleted
       new TaskModel('2', 'Task 2', true), // completed
       new TaskModel('3', 'Task 3', false), // incomplete

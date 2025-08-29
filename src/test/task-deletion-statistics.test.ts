@@ -22,7 +22,7 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Deletion Statistics Integration Tests', () => {
-  let container: HTMLElement;
+  let _container: HTMLElement;
 
   beforeEach(() => {
     // Reset localStorage mock
@@ -68,7 +68,7 @@ describe('Task Deletion Statistics Integration Tests', () => {
       </div>
     `;
 
-    container = document.getElementById('app')!;
+    _container = document.getElementById('app')!;
   });
 
   it("should update statistics from '1 個中 0 個完了' to '0 個中 0 個完了' when deleting an incomplete task", async () => {

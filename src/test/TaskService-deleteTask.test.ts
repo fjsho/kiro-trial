@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TaskService } from '../services/TaskService.js';
 import type { TaskRepository } from '../repositories/TaskRepository.js';
-import { TaskModel } from '../models/Task.js';
 
 describe('TaskService.deleteTask() Unit Tests', () => {
   let taskService: TaskService;

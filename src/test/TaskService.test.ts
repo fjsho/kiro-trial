@@ -6,11 +6,7 @@ import {
   vi,
   type MockedFunction,
 } from 'vitest';
-import {
-  TaskService,
-  type FilterType,
-  type TaskStats,
-} from '../services/TaskService';
+import { TaskService, type FilterType } from '../services/TaskService';
 import type { TaskRepository } from '../repositories/TaskRepository';
 import { TaskModel } from '../models/Task';
 import type { Task } from '../models/Task';

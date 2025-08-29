@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { LocalStorageTaskRepository } from '../repositories/LocalStorageTaskRepository';
 import { TaskModel } from '../models/Task';
-import type { Task } from '../models/Task';
 
 describe('LocalStorageTaskRepository', () => {
   let repository: LocalStorageTaskRepository;
