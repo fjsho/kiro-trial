@@ -11,8 +11,8 @@ const localStorageMock = {
 vi.stubGlobal('localStorage', localStorageMock);
 
 describe('Task Strikethrough Integration Tests', () => {
-  let container: HTMLElement;
-  let uiController: UIController;
+  let _container: HTMLElement;
+  let _uiController: UIController;
 
   beforeEach(() => {
     // Reset localStorage mock
@@ -57,8 +57,8 @@ describe('Task Strikethrough Integration Tests', () => {
       </div>
     `;
 
-    container = document.getElementById('app')!;
-    uiController = new UIController();
+    _container = document.getElementById('app')!;
+    _uiController = new UIController();
   });
 
   describe('Completed task strikethrough display', () => {

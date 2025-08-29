@@ -32,8 +32,8 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Edit Empty Validation - Integration Test', () => {
-  let container: HTMLElement;
-  let uiController: UIController;
+  let _container: HTMLElement;
+  let _uiController: UIController;
 
   beforeEach(() => {
     // Clear localStorage
@@ -66,8 +66,8 @@ describe('Task Edit Empty Validation - Integration Test', () => {
       </div>
     `;
 
-    container = document.getElementById('app')!;
-    uiController = new UIController();
+    _container = document.getElementById('app')!;
+    _uiController = new UIController();
   });
 
   it('should discard changes when saving with empty text via Enter key', async () => {

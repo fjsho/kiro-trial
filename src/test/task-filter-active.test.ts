@@ -39,9 +39,9 @@ describe('Task Filter Active - Integration Test', () => {
 
   it('should show only active tasks when active filter is selected', async () => {
     // Add some tasks with mixed completion status
-    const task1 = await taskService.addTask('Active Task 1');
+    const _task1 = await taskService.addTask('Active Task 1');
     const task2 = await taskService.addTask('Completed Task');
-    const task3 = await taskService.addTask('Active Task 2');
+    const _task3 = await taskService.addTask('Active Task 2');
 
     // Complete one task
     await taskService.toggleTask(task2.id);

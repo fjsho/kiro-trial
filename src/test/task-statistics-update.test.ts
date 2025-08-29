@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { UIController } from '../controllers/UIController.js';
 
 // Mock localStorage
@@ -24,7 +24,7 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('Task Statistics Update Integration Tests', () => {
-  let container: HTMLElement;
+  let _container: HTMLElement;
 
   beforeEach(() => {
     // Clear localStorage
@@ -68,7 +68,7 @@ describe('Task Statistics Update Integration Tests', () => {
       </div>
     `;
 
-    container = document.getElementById('app')!;
+    _container = document.getElementById('app')!;
   });
 
   it("should display initial statistics as '0 個中 0 個完了' when no tasks exist", async () => {

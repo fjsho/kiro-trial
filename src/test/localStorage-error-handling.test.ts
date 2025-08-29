@@ -184,7 +184,7 @@ describe('LocalStorage Error Handling Integration Tests', () => {
       });
 
       // UIController を初期化（この時点で getTasks が呼ばれてエラーが発生する）
-      const uiController = new UIController();
+      const _uiController = new UIController();
 
       // エラーメッセージが表示されることを確認
       await new Promise(resolve => setTimeout(resolve, 100)); // 非同期処理を待つ
@@ -221,7 +221,7 @@ describe('LocalStorage Error Handling Integration Tests', () => {
       });
 
       // UIController を初期化
-      const uiController = new UIController();
+      const _uiController = new UIController();
 
       // タスク追加を試行
       const taskInput = document.getElementById(
@@ -273,7 +273,7 @@ describe('LocalStorage Error Handling Integration Tests', () => {
       });
 
       // UIController を初期化
-      const uiController = new UIController();
+      const _uiController = new UIController();
 
       // タスク追加を試行してエラーを発生させる
       const taskInput = document.getElementById(

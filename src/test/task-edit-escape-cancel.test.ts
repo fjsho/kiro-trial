@@ -40,7 +40,7 @@ describe('Task Edit Escape Cancel - Integration Test', () => {
   it('should cancel edit and restore original text when Escape key is pressed', async () => {
     // Import UIController dynamically to ensure fresh instance
     const { UIController } = await import('../controllers/UIController.js');
-    const controller = new UIController();
+    const _controller = new UIController();
 
     // Add a task first
     const taskInput = document.getElementById(
@@ -112,7 +112,7 @@ describe('Task Edit Escape Cancel - Integration Test', () => {
   it('should handle Escape key press when not in edit mode gracefully', async () => {
     // Import UIController dynamically to ensure fresh instance
     const { UIController } = await import('../controllers/UIController.js');
-    const controller = new UIController();
+    const _controller = new UIController();
 
     // Add a task first
     const taskInput = document.getElementById(
