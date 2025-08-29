@@ -35,7 +35,7 @@ export class UIController {
   private taskService: TaskService;
   private currentFilter: FilterType = 'all';
   private editingTaskId: string | null = null;
-  private errorTimeoutId: number | null = null;
+  private errorTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   // Cached DOM elements for performance
   private emptyStateElement: HTMLElement | null = null;
@@ -186,7 +186,7 @@ export class UIController {
    * @param taskId - The unique identifier of the task
    */
   private enterEditMode(
-    taskItem: HTMLElement,
+    _taskItem: HTMLElement,
     taskTextElement: HTMLElement,
     taskId: string
   ): void {
@@ -669,7 +669,6 @@ export class UIController {
    */
   async handleFilterChange(filter: FilterType): Promise<void> {
     if (!this.isValidFilter(filter)) {
-      console.warn(`Invalid filter type: ${filter}`);
       return;
     }
 
