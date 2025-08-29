@@ -8,7 +8,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { UIController } from '../controllers/UIController.js';
 
 describe('UIController Error Handling Unit Tests', () => {
-  let _container: HTMLElement;
   let uiController: UIController;
 
   beforeEach(() => {
@@ -90,7 +89,7 @@ describe('UIController Error Handling Unit Tests', () => {
       </div>
     `;
 
-    _container = document.getElementById('app')!;
+    // DOM setup complete
 
     // LocalStorage をクリア
     localStorage.clear();

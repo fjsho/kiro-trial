@@ -82,7 +82,7 @@ describe('Task Filter - All Filter Integration Test', () => {
     );
 
     document = dom.window.document;
-    window = dom.window as Window & typeof globalThis;
+    window = dom.window as unknown as Window & typeof globalThis;
 
     // Set up global DOM
     global.document = document;

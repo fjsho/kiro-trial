@@ -66,7 +66,7 @@ describe('Task Deletion Statistics Integration Tests', () => {
       </div>
     `;
 
-    _container = document.getElementById('app')!;
+    // DOM setup complete
   });
 
   it("should update statistics from '1 個中 0 個完了' to '0 個中 0 個完了' when deleting an incomplete task", async () => {

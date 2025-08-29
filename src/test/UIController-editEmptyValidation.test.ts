@@ -32,8 +32,6 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 describe('UIController Edit Empty Validation - Unit Test', () => {
-  let _uiController: UIController;
-
   beforeEach(() => {
     // Clear localStorage
     localStorageMock.clear();
@@ -54,7 +52,7 @@ describe('UIController Edit Empty Validation - Unit Test', () => {
       </div>
     `;
 
-    _uiController = new UIController();
+    new UIController();
   });
 
   it('should call cancelEdit when saveEditedTask receives empty text', async () => {

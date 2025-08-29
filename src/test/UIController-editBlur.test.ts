@@ -2,8 +2,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { UIController } from '../controllers/UIController';
 
 describe('UIController - Edit Blur Unit Tests', () => {
-  let _uiController: UIController;
-
   beforeEach(() => {
     // Clear localStorage
     localStorage.clear();
@@ -27,7 +25,7 @@ describe('UIController - Edit Blur Unit Tests', () => {
       </div>
     `;
 
-    _uiController = new UIController();
+    new UIController();
   });
 
   it('should add blur event listener when creating edit input', () => {

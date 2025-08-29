@@ -21,11 +21,8 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting an incomplete task', async () => {
     // Arrange - Initial state: 3 tasks, 1 completed
-    const _initialTasks = [
-      new TaskModel('1', 'Task 1', false), // incomplete - will be deleted
-      new TaskModel('2', 'Task 2', true), // completed
-      new TaskModel('3', 'Task 3', false), // incomplete
-    ];
+    // Task 1 (incomplete) will be deleted
+    // Task 2 (completed) and Task 3 (incomplete) will remain
 
     // After deletion: 2 tasks, 1 completed
     const tasksAfterDeletion = [
@@ -51,11 +48,8 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting a completed task', async () => {
     // Arrange - Initial state: 3 tasks, 2 completed
-    const _initialTasks = [
-      new TaskModel('1', 'Task 1', true), // completed - will be deleted
-      new TaskModel('2', 'Task 2', true), // completed
-      new TaskModel('3', 'Task 3', false), // incomplete
-    ];
+    // Task 1 (completed) will be deleted
+    // Task 2 (completed) and Task 3 (incomplete) will remain
 
     // After deletion: 2 tasks, 1 completed
     const tasksAfterDeletion = [
@@ -81,9 +75,7 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting the last task', async () => {
     // Arrange - Initial state: 1 task
-    const _initialTasks = [
-      new TaskModel('1', 'Last task', false), // will be deleted
-    ];
+    // Last task (incomplete) will be deleted
 
     // After deletion: 0 tasks
     const tasksAfterDeletion: TaskModel[] = [];
@@ -106,13 +98,8 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting one of many completed tasks', async () => {
     // Arrange - Initial state: 5 tasks, 3 completed
-    const _initialTasks = [
-      new TaskModel('1', 'Task 1', true), // completed - will be deleted
-      new TaskModel('2', 'Task 2', true), // completed
-      new TaskModel('3', 'Task 3', false), // incomplete
-      new TaskModel('4', 'Task 4', true), // completed
-      new TaskModel('5', 'Task 5', false), // incomplete
-    ];
+    // Task 1 (completed) will be deleted
+    // Tasks 2, 3, 4, 5 will remain (2 completed, 2 incomplete)
 
     // After deletion: 4 tasks, 2 completed
     const tasksAfterDeletion = [
@@ -140,13 +127,8 @@ describe('TaskService Delete Task Statistics Unit Tests', () => {
 
   it('should calculate correct stats after deleting one of many incomplete tasks', async () => {
     // Arrange - Initial state: 5 tasks, 2 completed
-    const _initialTasks = [
-      new TaskModel('1', 'Task 1', false), // incomplete - will be deleted
-      new TaskModel('2', 'Task 2', true), // completed
-      new TaskModel('3', 'Task 3', false), // incomplete
-      new TaskModel('4', 'Task 4', true), // completed
-      new TaskModel('5', 'Task 5', false), // incomplete
-    ];
+    // Task 1 (incomplete) will be deleted
+    // Tasks 2, 3, 4, 5 will remain (2 completed, 2 incomplete)
 
     // After deletion: 4 tasks, 2 completed
     const tasksAfterDeletion = [

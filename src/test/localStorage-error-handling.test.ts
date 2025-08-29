@@ -90,7 +90,7 @@ describe('LocalStorage Error Handling Integration Tests', () => {
       </div>
     `;
 
-    _container = document.getElementById('app')!;
+    // DOM setup complete
 
     // LocalStorage の元の実装を保存
     originalLocalStorage = window.localStorage;

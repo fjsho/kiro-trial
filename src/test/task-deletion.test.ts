@@ -66,7 +66,7 @@ describe('Task Deletion Integration Tests', () => {
       </div>
     `;
 
-    _container = document.getElementById('app')!;
+    // DOM setup complete
   });
 
   it('should delete task when delete button is clicked', async () => {

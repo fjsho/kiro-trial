@@ -63,7 +63,7 @@ describe('Task Edit Empty Validation - Integration Test', () => {
       </div>
     `;
 
-    _container = document.getElementById('app')!;
+    // DOM setup complete
     void new UIController();
   });
 
