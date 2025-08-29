@@ -4,7 +4,7 @@ export default defineConfig({
   // GitHub Pages用の設定
   // リポジトリ名がURLに含まれる場合は '/repository-name/' に変更
   // カスタムドメインや username.github.io の場合は './' のまま
-  base: 'kito-trial/',
+  base: './',
 
   build: {
     // 出力ディレクトリ
